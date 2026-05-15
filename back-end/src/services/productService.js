@@ -1,0 +1,165 @@
+const pool = require('../db');
+
+// Create product
+async function createProduct({ ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_vi_tinh, gia_nhap, gia_ban, ton_kho_toi_thieu, han_su_dung, ngay_nhap_batch }) {
+  const [result] = await pool.query(
+    `INSERT INTO hang_hoa (ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_vi_tinh, gia_nhap, gia_ban, ton_kho_toi_thieu, han_su_dung, ngay_nhap_batch) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_vi_tinh, gia_nhap, gia_ban, ton_kho_toi_thieu, han_su_dung, ngay_nhap_batch]
+  );
+  return result.insertId;
+}
+
+// Get all products
+async function getAllProducts(filters = {}) {
+  let query = `
+    SELECT h.*, d.ten_danh_muc, n.ten_ncc
+    FROM hang_hoa h
+    LEFT JOIN danh_muc d ON h.id_danh_muc = d.id
+    LEFT JOIN nha_cung_cap n ON h.id_nha_cung_cap = n.id
+    WHERE 1=1
+  `;
+  const params = [];
+
+  if (filters.danh_muc) {
+    query += ` AND h.id_danh_muc = ?`;
+    params.push(filters.danh_muc);
+  }
+
+  if (filters.nha_cung_cap) {
+    query += ` AND h.id_nha_cung_cap = ?`;
+    params.push(filters.nha_cung_cap);
+  }
+
+  if (filters.search) {
+    query += ` AND (h.ma_sp LIKE ? OR h.ten_sp LIKE ?)`;
+    params.push(`%${filters.search}%`, `%${filters.search}%`);
+  }
+
+  if (filters.trang_thai) {
+    query += ` AND h.trang_thai = ?`;
+    params.push(filters.trang_thai);
+  }
+
+  query += ` ORDER BY h.ngay_tao DESC`;
+
+  const [rows] = await pool.query(query, params);
+  return rows;
+}
+
+// Get product by ID
+async function getProductById(id) {
+  const [rows] = await pool.query(
+    `SELECT h.*, d.ten_danh_muc, n.ten_ncc
+     FROM hang_hoa h
+     LEFT JOIN danh_muc d ON h.id_danh_muc = d.id
+     LEFT JOIN nha_cung_cap n ON h.id_nha_cung_cap = n.id
+     WHERE h.id = ?`,
+    [id]
+  );
+  return rows[0];
+}
+
+// Update product
+async function updateProduct(id, updateData) {
+  const fields = Object.keys(updateData).map(k => `${k} = ?`).join(', ');
+  const values = Object.values(updateData);
+  
+  await pool.query(
+    `UPDATE hang_hoa SET ${fields} WHERE id = ?`,
+    [...values, id]
+  );
+}
+
+// Update stock
+async function updateStock(id, soLuong) {
+  await pool.query(
+    `UPDATE hang_hoa SET ton_kho = ton_kho + ? WHERE id = ?`,
+    [soLuong, id]
+  );
+}
+
+// Delete product
+async function deleteProduct(id) {
+  await pool.query(
+    `UPDATE hang_hoa SET trang_thai = 'NGUNG_KD' WHERE id = ?`,
+    [id]
+  );
+}
+
+// Get products near minimum stock
+async function getProductsNearMinimumStock() {
+  const [rows] = await pool.query(`
+    SELECT h.*, d.ten_danh_muc, n.ten_ncc
+    FROM hang_hoa h
+    LEFT JOIN danh_muc d ON h.id_danh_muc = d.id
+    LEFT JOIN nha_cung_cap n ON h.id_nha_cung_cap = n.id
+    WHERE h.ton_kho <= h.ton_kho_toi_thieu AND h.trang_thai = 'HOAT_DONG'
+    ORDER BY h.ton_kho ASC
+  `);
+  return rows;
+}
+
+// Get products near/past expiry
+async function getProductsNearExpiry(days = 30) {
+  const [rows] = await pool.query(`
+    SELECT h.*, d.ten_danh_muc, n.ten_ncc
+    FROM hang_hoa h
+    LEFT JOIN danh_muc d ON h.id_danh_muc = d.id
+    LEFT JOIN nha_cung_cap n ON h.id_nha_cung_cap = n.id
+    WHERE h.han_su_dung IS NOT NULL 
+      AND h.han_su_dung <= DATE_ADD(CURDATE(), INTERVAL ? DAY)
+      AND h.trang_thai = 'HOAT_DONG'
+    ORDER BY h.han_su_dung ASC
+  `, [days]);
+  return rows;
+}
+
+// Get categories
+async function getCategories() {
+  const [rows] = await pool.query(`
+    SELECT * FROM danh_muc WHERE trang_thai = 'HOAT_DONG'
+  `);
+  return rows;
+}
+
+// Create category
+async function createCategory(ten_danh_muc, mo_ta = '') {
+  const [result] = await pool.query(
+    `INSERT INTO danh_muc (ten_danh_muc, mo_ta) VALUES (?, ?)`,
+    [ten_danh_muc, mo_ta]
+  );
+  return result.insertId;
+}
+
+// Get suppliers
+async function getSuppliers() {
+  const [rows] = await pool.query(`
+    SELECT * FROM nha_cung_cap WHERE trang_thai = 'HOAT_DONG'
+  `);
+  return rows;
+}
+
+// Create supplier
+async function createSupplier({ ten_ncc, email, so_dien_thoai, dia_chi }) {
+  const [result] = await pool.query(
+    `INSERT INTO nha_cung_cap (ten_ncc, email, so_dien_thoai, dia_chi) VALUES (?, ?, ?, ?)`,
+    [ten_ncc, email, so_dien_thoai, dia_chi]
+  );
+  return result.insertId;
+}
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+  updateStock,
+  deleteProduct,
+  getProductsNearMinimumStock,
+  getProductsNearExpiry,
+  getCategories,
+  createCategory,
+  getSuppliers,
+  createSupplier,
+};
