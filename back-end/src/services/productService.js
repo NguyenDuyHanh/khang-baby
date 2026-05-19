@@ -10,41 +10,79 @@ async function createProduct({ ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_
   return result.insertId;
 }
 
-// Get all products
+// Get all products (with pagination)
 async function getAllProducts(filters = {}) {
-  let query = `
+  const page = Number(filters.page) || 1;
+  const limit = Number(filters.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  let countQuery = `
+    SELECT COUNT(*) as count
+    FROM hang_hoa h
+    LEFT JOIN danh_muc d ON h.id_danh_muc = d.id
+    LEFT JOIN nha_cung_cap n ON h.id_nha_cung_cap = n.id
+    WHERE 1=1
+  `;
+
+  let dataQuery = `
     SELECT h.*, d.ten_danh_muc, n.ten_ncc
     FROM hang_hoa h
     LEFT JOIN danh_muc d ON h.id_danh_muc = d.id
     LEFT JOIN nha_cung_cap n ON h.id_nha_cung_cap = n.id
     WHERE 1=1
   `;
-  const params = [];
+  const countParams = [];
+  const dataParams = [];
 
   if (filters.danh_muc) {
-    query += ` AND h.id_danh_muc = ?`;
-    params.push(filters.danh_muc);
+    countQuery += ` AND h.id_danh_muc = ?`;
+    dataQuery += ` AND h.id_danh_muc = ?`;
+    countParams.push(filters.danh_muc);
+    dataParams.push(filters.danh_muc);
   }
 
   if (filters.nha_cung_cap) {
-    query += ` AND h.id_nha_cung_cap = ?`;
-    params.push(filters.nha_cung_cap);
+    countQuery += ` AND h.id_nha_cung_cap = ?`;
+    dataQuery += ` AND h.id_nha_cung_cap = ?`;
+    countParams.push(filters.nha_cung_cap);
+    dataParams.push(filters.nha_cung_cap);
   }
 
   if (filters.search) {
-    query += ` AND (h.ma_sp LIKE ? OR h.ten_sp LIKE ?)`;
-    params.push(`%${filters.search}%`, `%${filters.search}%`);
+    countQuery += ` AND (h.ma_sp LIKE ? OR h.ten_sp LIKE ?)`;
+    dataQuery += ` AND (h.ma_sp LIKE ? OR h.ten_sp LIKE ?)`;
+    countParams.push(`%${filters.search}%`, `%${filters.search}%`);
+    dataParams.push(`%${filters.search}%`, `%${filters.search}%`);
   }
 
   if (filters.trang_thai) {
-    query += ` AND h.trang_thai = ?`;
-    params.push(filters.trang_thai);
+    countQuery += ` AND h.trang_thai = ?`;
+    dataQuery += ` AND h.trang_thai = ?`;
+    countParams.push(filters.trang_thai);
+    dataParams.push(filters.trang_thai);
   }
 
-  query += ` ORDER BY h.ngay_tao DESC`;
+  if (filters.ton_kho_trang_thai) {
+    if (filters.ton_kho_trang_thai === 'OUT') {
+      countQuery += ` AND h.ton_kho <= 0`;
+      dataQuery += ` AND h.ton_kho <= 0`;
+    } else if (filters.ton_kho_trang_thai === 'LOW') {
+      countQuery += ` AND h.ton_kho > 0 AND h.ton_kho <= h.ton_kho_toi_thieu`;
+      dataQuery += ` AND h.ton_kho > 0 AND h.ton_kho <= h.ton_kho_toi_thieu`;
+    } else if (filters.ton_kho_trang_thai === 'EXPIRING') {
+      countQuery += ` AND h.han_su_dung IS NOT NULL AND h.han_su_dung <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)`;
+      dataQuery += ` AND h.han_su_dung IS NOT NULL AND h.han_su_dung <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)`;
+    }
+  }
 
-  const [rows] = await pool.query(query, params);
-  return rows;
+  const [countRows] = await pool.query(countQuery, countParams);
+  const totalItems = Number(countRows[0].count);
+
+  dataQuery += ` ORDER BY h.ngay_tao DESC LIMIT ? OFFSET ?`;
+  dataParams.push(limit, offset);
+
+  const [rows] = await pool.query(dataQuery, dataParams);
+  return { rows, totalItems, page, limit };
 }
 
 // Get product by ID

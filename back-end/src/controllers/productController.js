@@ -8,10 +8,22 @@ async function getAllProducts(req, res) {
       nha_cung_cap: req.query.nha_cung_cap,
       search: req.query.search,
       trang_thai: req.query.trang_thai || 'HOAT_DONG',
+      ton_kho_trang_thai: req.query.ton_kho_trang_thai,
+      page: Number(req.query.page) || 1,
+      limit: Number(req.query.limit) || 10,
     };
 
-    const products = await productService.getAllProducts(filters);
-    res.json({ ok: true, data: products });
+    const { rows, totalItems, page, limit } = await productService.getAllProducts(filters);
+    res.json({ 
+      ok: true, 
+      data: rows,
+      pagination: {
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page,
+        limit
+      }
+    });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
   }

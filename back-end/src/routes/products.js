@@ -7,13 +7,6 @@ const { checkRole } = auth;
 // All product routes require authentication
 router.use(auth);
 
-// Products
-router.get('/', productController.getAllProducts);
-router.get('/:id', productController.getProductById);
-router.post('/', checkRole('MANAGER', 'WAREHOUSE'), productController.createProduct);
-router.put('/:id', checkRole('MANAGER', 'WAREHOUSE'), productController.updateProduct);
-router.delete('/:id', checkRole('MANAGER', 'WAREHOUSE'), productController.deleteProduct);
-
 // Stock alerts
 router.get('/alerts/near-minimum', productController.getProductsNearMinimumStock);
 router.get('/alerts/expiring', productController.getProductsNearExpiry);
@@ -25,5 +18,12 @@ router.post('/categories', checkRole('MANAGER', 'WAREHOUSE'), productController.
 // Suppliers
 router.get('/suppliers/list', productController.getSuppliers);
 router.post('/suppliers', checkRole('MANAGER', 'WAREHOUSE'), productController.createSupplier);
+
+// Products - General & Parameterized routes
+router.get('/', productController.getAllProducts);
+router.get('/:id', productController.getProductById);
+router.post('/', checkRole('MANAGER', 'WAREHOUSE'), productController.createProduct);
+router.put('/:id', checkRole('MANAGER', 'WAREHOUSE'), productController.updateProduct);
+router.delete('/:id', checkRole('MANAGER', 'WAREHOUSE'), productController.deleteProduct);
 
 module.exports = router;

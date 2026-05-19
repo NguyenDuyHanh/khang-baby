@@ -7,6 +7,8 @@ const invoiceRoutes = require('./routes/invoices');
 const receiptRoutes = require('./routes/receipts');
 const orderRoutes = require('./routes/orders');
 const reportRoutes = require('./routes/reports');
+const returnRoutes = require('./routes/returns');
+const feedbackRoutes = require('./routes/feedbacks');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -23,6 +25,8 @@ app.use('/api/invoices', invoiceRoutes);
 app.use('/api/receipts', receiptRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/returns', returnRoutes);
+app.use('/api/feedbacks', feedbackRoutes);
 
 // Health check
 app.get('/', (req, res) => res.json({ ok: true, message: 'Backend for khang-baby' }));

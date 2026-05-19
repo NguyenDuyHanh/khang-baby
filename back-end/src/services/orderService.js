@@ -21,40 +21,64 @@ async function addOrderItem(id_don_hang, id_hang_hoa, gia_ban, so_luong, thanh_t
   return result.insertId;
 }
 
-// Get all orders
+// Get all orders (with pagination)
 async function getAllOrders(filters = {}) {
-  let query = `
+  const page = Number(filters.page) || 1;
+  const limit = Number(filters.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  let countQuery = `
+    SELECT COUNT(*) as count
+    FROM don_hang_online o
+    LEFT JOIN nhan_vien nv ON o.id_nhan_vien = nv.id
+    WHERE 1=1
+  `;
+
+  let dataQuery = `
     SELECT o.*, nv.ho_ten as ten_nhan_vien
     FROM don_hang_online o
     LEFT JOIN nhan_vien nv ON o.id_nhan_vien = nv.id
     WHERE 1=1
   `;
-  const params = [];
+  const countParams = [];
+  const dataParams = [];
 
   if (filters.trang_thai) {
-    query += ` AND o.trang_thai = ?`;
-    params.push(filters.trang_thai);
+    countQuery += ` AND o.trang_thai = ?`;
+    dataQuery += ` AND o.trang_thai = ?`;
+    countParams.push(filters.trang_thai);
+    dataParams.push(filters.trang_thai);
   }
 
   if (filters.search) {
-    query += ` AND (o.ma_don LIKE ? OR o.ten_khach_hang LIKE ?)`;
-    params.push(`%${filters.search}%`, `%${filters.search}%`);
+    countQuery += ` AND (o.ma_don LIKE ? OR o.ten_khach_hang LIKE ? OR o.so_dien_thoai LIKE ?)`;
+    dataQuery += ` AND (o.ma_don LIKE ? OR o.ten_khach_hang LIKE ? OR o.so_dien_thoai LIKE ?)`;
+    countParams.push(`%${filters.search}%`, `%${filters.search}%`, `%${filters.search}%`);
+    dataParams.push(`%${filters.search}%`, `%${filters.search}%`, `%${filters.search}%`);
   }
 
   if (filters.kenh_dat_hang) {
-    query += ` AND o.kenh_dat_hang = ?`;
-    params.push(filters.kenh_dat_hang);
+    countQuery += ` AND o.kenh_dat_hang = ?`;
+    dataQuery += ` AND o.kenh_dat_hang = ?`;
+    countParams.push(filters.kenh_dat_hang);
+    dataParams.push(filters.kenh_dat_hang);
   }
 
   if (filters.ngay_bat_dau && filters.ngay_ket_thuc) {
-    query += ` AND DATE(o.ngay_dat) BETWEEN ? AND ?`;
-    params.push(filters.ngay_bat_dau, filters.ngay_ket_thuc);
+    countQuery += ` AND DATE(o.ngay_dat) BETWEEN ? AND ?`;
+    dataQuery += ` AND DATE(o.ngay_dat) BETWEEN ? AND ?`;
+    countParams.push(filters.ngay_bat_dau, filters.ngay_ket_thuc);
+    dataParams.push(filters.ngay_bat_dau, filters.ngay_ket_thuc);
   }
 
-  query += ` ORDER BY o.ngay_dat DESC`;
+  const [countRows] = await pool.query(countQuery, countParams);
+  const totalItems = Number(countRows[0].count);
 
-  const [rows] = await pool.query(query, params);
-  return rows;
+  dataQuery += ` ORDER BY o.ngay_dat DESC LIMIT ? OFFSET ?`;
+  dataParams.push(limit, offset);
+
+  const [rows] = await pool.query(dataQuery, dataParams);
+  return { rows, totalItems, page, limit };
 }
 
 // Get order by ID

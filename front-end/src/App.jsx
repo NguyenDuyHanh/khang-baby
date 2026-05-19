@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { FileText } from "lucide-react";
 
 import AppLayout from "@/layout/AppLayout";
 import Overview from "@/pages/Overview";
@@ -18,6 +19,8 @@ import Stock from "@/pages/inventory/Stock";
 import Receipts from "@/pages/inventory/Receipts";
 import ReceiptForm from "@/pages/inventory/ReceiptForm";
 import ReceiptView from "@/pages/inventory/ReceiptView";
+import Returns from "@/pages/inventory/Returns";
+import Feedback from "@/pages/inventory/Feedback";
 
 import Orders from "@/pages/online/Orders";
 import OrderForm from "@/pages/online/OrderForm";
@@ -98,6 +101,22 @@ function App() {
             element={
               <RequireRole allow={["MANAGER", "WAREHOUSE"]}>
                 <ReceiptForm />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="returns"
+            element={
+              <RequireRole allow={["MANAGER", "WAREHOUSE"]}>
+                <Returns />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="feedback"
+            element={
+              <RequireRole allow={["MANAGER", "WAREHOUSE"]}>
+                <Feedback />
               </RequireRole>
             }
           />

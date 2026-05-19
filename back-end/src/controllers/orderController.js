@@ -10,10 +10,21 @@ async function getAllOrders(req, res) {
       kenh_dat_hang: req.query.kenh_dat_hang,
       ngay_bat_dau: req.query.ngay_bat_dau,
       ngay_ket_thuc: req.query.ngay_ket_thuc,
+      page: Number(req.query.page) || 1,
+      limit: Number(req.query.limit) || 10,
     };
 
-    const orders = await orderService.getAllOrders(filters);
-    res.json({ ok: true, data: orders });
+    const { rows, totalItems, page, limit } = await orderService.getAllOrders(filters);
+    res.json({ 
+      ok: true, 
+      data: rows,
+      pagination: {
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page,
+        limit
+      }
+    });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
   }
