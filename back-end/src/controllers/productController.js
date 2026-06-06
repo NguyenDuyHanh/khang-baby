@@ -8,10 +8,22 @@ async function getAllProducts(req, res) {
       nha_cung_cap: req.query.nha_cung_cap,
       search: req.query.search,
       trang_thai: req.query.trang_thai || 'HOAT_DONG',
+      ton_kho_trang_thai: req.query.ton_kho_trang_thai,
+      page: Number(req.query.page) || 1,
+      limit: Number(req.query.limit) || 10,
     };
 
-    const products = await productService.getAllProducts(filters);
-    res.json({ ok: true, data: products });
+    const { rows, totalItems, page, limit } = await productService.getAllProducts(filters);
+    res.json({ 
+      ok: true, 
+      data: rows,
+      pagination: {
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page,
+        limit
+      }
+    });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
   }
@@ -39,6 +51,10 @@ async function createProduct(req, res) {
       return res.status(400).json({ ok: false, message: 'Missing required fields' });
     }
 
+    if (req.file) {
+      productData.hinh_anh = `/uploads/products/${req.file.filename}`;
+    }
+
     const id = await productService.createProduct(productData);
 
     res.status(201).json({
@@ -54,7 +70,13 @@ async function createProduct(req, res) {
 // Update product
 async function updateProduct(req, res) {
   try {
-    await productService.updateProduct(req.params.id, req.body);
+    const updateData = req.body;
+    
+    if (req.file) {
+      updateData.hinh_anh = `/uploads/products/${req.file.filename}`;
+    }
+
+    await productService.updateProduct(req.params.id, updateData);
 
     res.json({
       ok: true,

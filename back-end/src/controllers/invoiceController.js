@@ -9,10 +9,21 @@ async function getAllInvoices(req, res) {
       search: req.query.search,
       ngay_bat_dau: req.query.ngay_bat_dau,
       ngay_ket_thuc: req.query.ngay_ket_thuc,
+      page: Number(req.query.page) || 1,
+      limit: Number(req.query.limit) || 10,
     };
 
-    const invoices = await invoiceService.getAllInvoices(filters);
-    res.json({ ok: true, data: invoices });
+    const { rows, totalItems, page, limit } = await invoiceService.getAllInvoices(filters);
+    res.json({ 
+      ok: true, 
+      data: rows,
+      pagination: {
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page,
+        limit
+      }
+    });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
   }
@@ -34,7 +45,7 @@ async function getInvoiceById(req, res) {
 // Create invoice
 async function createInvoice(req, res) {
   try {
-    const { ten_khach_hang, id_khach_hang, ma_voucher, items } = req.body;
+    const { ten_khach_hang, so_dien_thoai, id_khach_hang, ma_voucher, items } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ ok: false, message: 'Invoice must have at least one item' });
@@ -65,6 +76,7 @@ async function createInvoice(req, res) {
       id_nhan_vien: req.user.id,
       id_khach_hang,
       ten_khach_hang: ten_khach_hang || 'Khách lẻ',
+      so_dien_thoai: so_dien_thoai || null,
       ma_voucher,
       tong_tien_hang,
       tien_giam,
@@ -101,6 +113,54 @@ async function confirmPayment(req, res) {
     const invoice = await invoiceService.getInvoiceById(req.params.id);
     if (invoice.ma_voucher) {
       await voucherService.incrementVoucherUsage(invoice.ma_voucher);
+    }
+
+    // Also create a don_hang_online record for tracking unified orders
+    try {
+      const orderService = require('../services/orderService');
+      const orderData = {
+        ma_don: await orderService.generateOrderId(),
+        ngay_dat: new Date(),
+        ten_khach_hang: invoice.ten_khach_hang || 'Khách lẻ',
+        so_dien_thoai: '',
+        dia_chi_giao: 'Bán tại quầy',
+        ghi_chu_don: `Hóa đơn: ${invoice.ma_hdb}`,
+        kenh_dat_hang: 'TRỰC TIẾP',
+        id_nhan_vien: invoice.id_nhan_vien,
+        ma_voucher: invoice.ma_voucher,
+        don_vi_van_chuyen: '',
+        phi_giao_hang: 0,
+        ngay_giao_du_kien: null,
+        tong_tien_hang: invoice.tong_tien_hang,
+        tien_giam: invoice.tien_giam,
+        tong_thanh_toan: invoice.tong_can_thanh_toan,
+        phuong_thuc_thanh_toan: invoice.phuong_thuc_thanh_toan
+      };
+      
+      const orderId = await orderService.createOrder(orderData);
+      
+      for (const item of invoice.items) {
+         await orderService.addOrderItem(orderId, item.id_hang_hoa, item.gia_ban, item.so_luong, item.gia_ban * item.so_luong);
+      }
+      
+      await orderService.completeOrder(orderId);
+    } catch (orderErr) {
+      console.error('Failed to create synced order:', orderErr);
+    }
+
+    // Upsert customer if phone number is provided
+    if (invoice.so_dien_thoai) {
+      try {
+        const customerService = require('../services/customerService');
+        await customerService.upsertCustomer({
+          ho_ten: invoice.ten_khach_hang,
+          so_dien_thoai: invoice.so_dien_thoai,
+          dia_chi: 'Mua trực tiếp',
+          chi_tieu_moi: invoice.tong_can_thanh_toan
+        });
+      } catch (custErr) {
+        console.error('Failed to upsert customer:', custErr);
+      }
     }
 
     res.json({

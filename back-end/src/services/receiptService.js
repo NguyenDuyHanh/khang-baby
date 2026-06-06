@@ -25,31 +25,51 @@ async function addReceiptItem(id_phieu_nhap, id_hang_hoa, gia_nhap, so_luong, ng
   return result.insertId;
 }
 
-// Get all receipts
+// Get all receipts (with pagination)
 async function getAllReceipts(filters = {}) {
-  let query = `
+  const page = Number(filters.page) || 1;
+  const limit = Number(filters.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  let countQuery = `
+    SELECT COUNT(*) as count
+    FROM phieu_nhap_hang p
+    LEFT JOIN nha_cung_cap n ON p.id_nha_cung_cap = n.id
+    WHERE 1=1
+  `;
+  
+  let dataQuery = `
     SELECT p.*, n.ten_ncc, nv.ho_ten as ten_nhan_vien
     FROM phieu_nhap_hang p
     LEFT JOIN nha_cung_cap n ON p.id_nha_cung_cap = n.id
     LEFT JOIN nhan_vien nv ON p.id_nhan_vien = nv.id
     WHERE 1=1
   `;
-  const params = [];
+  const countParams = [];
+  const dataParams = [];
 
   if (filters.trang_thai_thanh_toan) {
-    query += ` AND p.trang_thai_thanh_toan = ?`;
-    params.push(filters.trang_thai_thanh_toan);
+    countQuery += ` AND p.trang_thai_thanh_toan = ?`;
+    dataQuery += ` AND p.trang_thai_thanh_toan = ?`;
+    countParams.push(filters.trang_thai_thanh_toan);
+    dataParams.push(filters.trang_thai_thanh_toan);
   }
 
   if (filters.search) {
-    query += ` AND (p.ma_pnh LIKE ? OR n.ten_ncc LIKE ?)`;
-    params.push(`%${filters.search}%`, `%${filters.search}%`);
+    countQuery += ` AND (p.ma_pnh LIKE ? OR n.ten_ncc LIKE ?)`;
+    dataQuery += ` AND (p.ma_pnh LIKE ? OR n.ten_ncc LIKE ?)`;
+    countParams.push(`%${filters.search}%`, `%${filters.search}%`);
+    dataParams.push(`%${filters.search}%`, `%${filters.search}%`);
   }
 
-  query += ` ORDER BY p.ngay_nhap DESC`;
+  const [countRows] = await pool.query(countQuery, countParams);
+  const totalItems = Number(countRows[0].count);
 
-  const [rows] = await pool.query(query, params);
-  return rows;
+  dataQuery += ` ORDER BY p.ngay_nhap DESC LIMIT ? OFFSET ?`;
+  dataParams.push(limit, offset);
+
+  const [rows] = await pool.query(dataQuery, dataParams);
+  return { rows, totalItems, page, limit };
 }
 
 // Get receipt by ID

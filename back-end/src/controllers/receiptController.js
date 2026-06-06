@@ -6,10 +6,21 @@ async function getAllReceipts(req, res) {
     const filters = {
       trang_thai_thanh_toan: req.query.trang_thai_thanh_toan,
       search: req.query.search,
+      page: Number(req.query.page) || 1,
+      limit: Number(req.query.limit) || 10,
     };
 
-    const receipts = await receiptService.getAllReceipts(filters);
-    res.json({ ok: true, data: receipts });
+    const { rows, totalItems, page, limit } = await receiptService.getAllReceipts(filters);
+    res.json({ 
+      ok: true, 
+      data: rows,
+      pagination: {
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page,
+        limit
+      }
+    });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
   }

@@ -7,7 +7,11 @@ const { checkRole } = auth;
 // All order routes require authentication
 router.use(auth);
 
-// Orders
+// Stats - Specific endpoints first
+router.get('/stats/pending', orderController.getPendingOrdersCount);
+router.get('/recent', orderController.getRecentOrders);
+
+// Orders - General & Parameterized routes
 router.get('/', checkRole('MANAGER', 'ONLINE_SALES'), orderController.getAllOrders);
 router.get('/:id', checkRole('MANAGER', 'ONLINE_SALES'), orderController.getOrderById);
 router.post('/', checkRole('MANAGER', 'ONLINE_SALES'), orderController.createOrder);
@@ -17,9 +21,7 @@ router.put('/:id', checkRole('MANAGER', 'ONLINE_SALES'), orderController.updateO
 router.post('/:id/confirm', checkRole('MANAGER', 'ONLINE_SALES'), orderController.confirmOrder);
 router.post('/:id/cancel', checkRole('MANAGER', 'ONLINE_SALES'), orderController.cancelOrder);
 router.post('/:id/complete', checkRole('MANAGER', 'ONLINE_SALES'), orderController.completeOrder);
-
-// Stats
-router.get('/stats/pending', orderController.getPendingOrdersCount);
-router.get('/recent', orderController.getRecentOrders);
+router.post('/:id/close-complaint', checkRole('MANAGER', 'ONLINE_SALES'), orderController.closeComplaint);
+router.post('/:id/retry-delivery', checkRole('MANAGER', 'ONLINE_SALES'), orderController.retryDelivery);
 
 module.exports = router;

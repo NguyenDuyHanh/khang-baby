@@ -10,6 +10,7 @@ const getSectionTitle = (pathname) => {
   if (pathname.startsWith("/pos")) return "Bán tại quầy";
   if (pathname.startsWith("/inventory")) return "Quản lý kho";
   if (pathname.startsWith("/online")) return "Đơn hàng Online";
+  if (pathname.startsWith("/customers")) return "Khách hàng";
   if (pathname.startsWith("/reports")) return "Báo cáo";
   if (pathname.startsWith("/staff")) return "Nhân viên";
   return "Tổng quan";
@@ -52,6 +53,9 @@ export default function AppLayout() {
           </div>
 
           <div className="flex items-center gap-2 lg:gap-4">
+            <a href="http://localhost:5173" target="_blank" rel="noopener noreferrer" className="hidden sm:flex text-sm font-medium text-primary hover:underline items-center gap-1 px-2">
+               🌐 View Website
+            </a>
             <div className="relative">
               <span className="absolute -top-1 -right-1 bg-destructive text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
                 3

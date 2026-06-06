@@ -2,11 +2,11 @@ const pool = require('../db');
 const productService = require('./productService');
 
 // Create invoice
-async function createInvoice({ ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai = 'CHO_XAC_NHAN' }) {
+async function createInvoice({ ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, so_dien_thoai, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai = 'CHO_XAC_NHAN' }) {
   const [result] = await pool.query(
-    `INSERT INTO hoa_don_ban (ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai]
+    `INSERT INTO hoa_don_ban (ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, so_dien_thoai, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, so_dien_thoai, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai]
   );
   return result.insertId;
 }
@@ -21,35 +21,57 @@ async function addInvoiceItem(id_hoa_don, id_hang_hoa, gia_ban, so_luong, thanh_
   return result.insertId;
 }
 
-// Get all invoices
+// Get all invoices (with pagination)
 async function getAllInvoices(filters = {}) {
-  let query = `
+  const page = Number(filters.page) || 1;
+  const limit = Number(filters.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  let countQuery = `
+    SELECT COUNT(*) as count
+    FROM hoa_don_ban h
+    LEFT JOIN nhan_vien nv ON h.id_nhan_vien = nv.id
+    WHERE 1=1
+  `;
+
+  let dataQuery = `
     SELECT h.*, nv.ho_ten as ten_nhan_vien
     FROM hoa_don_ban h
     LEFT JOIN nhan_vien nv ON h.id_nhan_vien = nv.id
     WHERE 1=1
   `;
-  const params = [];
+  const countParams = [];
+  const dataParams = [];
 
   if (filters.trang_thai) {
-    query += ` AND h.trang_thai = ?`;
-    params.push(filters.trang_thai);
+    countQuery += ` AND h.trang_thai = ?`;
+    dataQuery += ` AND h.trang_thai = ?`;
+    countParams.push(filters.trang_thai);
+    dataParams.push(filters.trang_thai);
   }
 
   if (filters.search) {
-    query += ` AND (h.ma_hdb LIKE ? OR h.ten_khach_hang LIKE ?)`;
-    params.push(`%${filters.search}%`, `%${filters.search}%`);
+    countQuery += ` AND (h.ma_hdb LIKE ? OR h.ten_khach_hang LIKE ?)`;
+    dataQuery += ` AND (h.ma_hdb LIKE ? OR h.ten_khach_hang LIKE ?)`;
+    countParams.push(`%${filters.search}%`, `%${filters.search}%`);
+    dataParams.push(`%${filters.search}%`, `%${filters.search}%`);
   }
 
   if (filters.ngay_bat_dau && filters.ngay_ket_thuc) {
-    query += ` AND DATE(h.ngay_ban) BETWEEN ? AND ?`;
-    params.push(filters.ngay_bat_dau, filters.ngay_ket_thuc);
+    countQuery += ` AND DATE(h.ngay_ban) BETWEEN ? AND ?`;
+    dataQuery += ` AND DATE(h.ngay_ban) BETWEEN ? AND ?`;
+    countParams.push(filters.ngay_bat_dau, filters.ngay_ket_thuc);
+    dataParams.push(filters.ngay_bat_dau, filters.ngay_ket_thuc);
   }
 
-  query += ` ORDER BY h.ngay_ban DESC`;
+  const [countRows] = await pool.query(countQuery, countParams);
+  const totalItems = Number(countRows[0].count);
 
-  const [rows] = await pool.query(query, params);
-  return rows;
+  dataQuery += ` ORDER BY h.ngay_ban DESC LIMIT ? OFFSET ?`;
+  dataParams.push(limit, offset);
+
+  const [rows] = await pool.query(dataQuery, dataParams);
+  return { rows, totalItems, page, limit };
 }
 
 // Get invoice by ID

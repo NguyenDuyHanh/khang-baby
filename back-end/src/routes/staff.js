@@ -7,22 +7,16 @@ const { checkRole } = auth;
 // All staff routes require authentication
 router.use(auth);
 
+// Change password
+router.post('/change-password', staffController.changePassword);
+
 // Get all staff
 router.get('/', checkRole('MANAGER'), staffController.getAllStaff);
 
-// Get staff by ID
+// Parameterized routes
 router.get('/:id', checkRole('MANAGER'), staffController.getStaffById);
-
-// Create staff
 router.post('/', checkRole('MANAGER'), staffController.createStaff);
-
-// Update staff
 router.put('/:id', checkRole('MANAGER'), staffController.updateStaff);
-
-// Delete staff
 router.delete('/:id', checkRole('MANAGER'), staffController.deleteStaff);
-
-// Change password
-router.post('/change-password', staffController.changePassword);
 
 module.exports = router;

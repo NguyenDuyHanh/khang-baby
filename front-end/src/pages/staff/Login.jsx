@@ -28,6 +28,12 @@ export default function Login() {
         setError(res.message || "Đăng nhập không thành công.");
         return;
       }
+      
+      if (res.user && res.user.role === "CUSTOMER") {
+         setError("Tài khoản khách hàng không thể đăng nhập vào hệ thống quản lý.");
+         return;
+      }
+
       navigate(from, { replace: true });
     });
   };
