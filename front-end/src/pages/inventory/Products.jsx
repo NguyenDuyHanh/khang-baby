@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrencyVND, formatDateVN } from "@/lib/format";
 import { useAuth } from "@/context/AuthContext";
-import { apiRequest } from "@/lib/api";
+import { apiRequest, apiUpload } from "@/lib/api";
 import { exportToExcel } from "@/lib/export";
+import ConfirmDialog from "@/components/ui/confirm-dialog";
 
 function stockStatus(stock, minStock) {
   if (stock <= 0 || stock <= minStock) return "OUT";
@@ -44,6 +45,100 @@ export default function Products() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+
+  // Form State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [formData, setFormData] = useState({
+    ma_sp: '', ten_sp: '', id_danh_muc: '', id_nha_cung_cap: '',
+    don_vi_tinh: 'HOP', gia_nhap: 0, gia_ban: 0, ton_kho_toi_thieu: 10, han_su_dung: ''
+  });
+  const [imageFile, setImageFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleOpenModal = (product = null) => {
+    if (product && product.id) {
+      setEditId(product.id);
+      setFormData({
+        ma_sp: product.ma_sp || '', 
+        ten_sp: product.ten_sp || '', 
+        id_danh_muc: product.id_danh_muc || categories[0]?.id || '', 
+        id_nha_cung_cap: product.id_nha_cung_cap || suppliers[0]?.id || '',
+        don_vi_tinh: product.don_vi_tinh || 'HOP', 
+        gia_nhap: product.gia_nhap || 0, 
+        gia_ban: product.gia_ban || 0, 
+        ton_kho_toi_thieu: product.ton_kho_toi_thieu || 10, 
+        han_su_dung: product.han_su_dung ? new Date(product.han_su_dung).toISOString().split('T')[0] : ''
+      });
+    } else {
+      setEditId(null);
+      setFormData({
+        ma_sp: '', ten_sp: '', id_danh_muc: categories[0]?.id || '', id_nha_cung_cap: suppliers[0]?.id || '',
+        don_vi_tinh: 'HOP', gia_nhap: 0, gia_ban: 0, ton_kho_toi_thieu: 10, han_su_dung: ''
+      });
+    }
+    setImageFile(null);
+    setErrorMsg("");
+    setIsModalOpen(true);
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMsg("");
+    try {
+      const data = new FormData();
+      Object.keys(formData).forEach(key => {
+        data.append(key, formData[key]);
+      });
+      if (imageFile) {
+        data.append('hinh_anh', imageFile);
+      }
+      
+      if (editId) {
+        const res = await apiUpload('/products/' + editId, data, { method: 'PUT', token });
+        if (res?.ok) {
+          setIsModalOpen(false);
+          fetchProducts(); // refresh
+        }
+      } else {
+        const res = await apiUpload('/products', data, { token });
+        if (res?.ok) {
+          setIsModalOpen(false);
+          fetchProducts(); // refresh
+        }
+      }
+    } catch (err) {
+      setErrorMsg(err.message || "Có lỗi xảy ra");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteExecute = async () => {
+    if (!deleteId) return;
+    setIsDeleting(true);
+    try {
+      const res = await apiRequest(`/products/${deleteId}`, { method: 'DELETE', token });
+      if (res.ok) {
+        setDeleteId(null);
+        fetchProducts();
+      }
+    } catch (err) {
+      alert("Lỗi khi xóa: " + err.message);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   // Load lists for selectors (Categories and Suppliers)
   useEffect(() => {
@@ -136,7 +231,7 @@ export default function Products() {
               Xuất file Excel
             </Button>
             {canEdit ? (
-              <Button className="gap-2 bg-primary hover:bg-primary/95 text-white" onClick={() => {}}>
+              <Button className="gap-2 bg-primary hover:bg-primary/95 text-white" onClick={() => handleOpenModal()}>
                 <Plus size={16} />
                 Thêm sản phẩm
               </Button>
@@ -195,6 +290,7 @@ export default function Products() {
               <table className="w-full text-sm min-w-max">
                 <thead className="bg-slate-50 text-slate-600">
                   <tr>
+                    <th className="px-4 py-3 text-left font-semibold w-16">Ảnh</th>
                     <th className="px-4 py-3 text-left font-semibold">Mã SP</th>
                     <th className="px-4 py-3 text-left font-semibold">Tên sản phẩm</th>
                     <th className="px-4 py-3 text-left font-semibold">Danh mục</th>
@@ -211,6 +307,13 @@ export default function Products() {
                 <tbody className="divide-y divide-slate-100">
                   {products.map((p) => (
                     <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-4 py-3">
+                        {p.hinh_anh ? (
+                          <img src={p.hinh_anh} alt={p.ten_sp} className="w-10 h-10 object-cover rounded-md border" />
+                        ) : (
+                          <div className="w-10 h-10 bg-slate-100 rounded-md border flex items-center justify-center text-xs text-slate-400">N/A</div>
+                        )}
+                      </td>
                       <td className="px-4 py-3 font-bold text-slate-800">{p.ma_sp}</td>
                       <td className="px-4 py-3 font-medium text-slate-800 min-w-52">{p.ten_sp}</td>
                       <td className="px-4 py-3 text-slate-600">{p.ten_danh_muc || "Chưa phân loại"}</td>
@@ -224,10 +327,10 @@ export default function Products() {
                       {canEdit ? (
                         <td className="px-4 py-3">
                           <div className="flex items-center justify-end gap-2">
-                            <Button variant="outline" size="icon" aria-label="Sửa" onClick={() => {}}>
+                            <Button variant="outline" size="icon" aria-label="Sửa" onClick={() => handleOpenModal(p)}>
                               <Pencil size={16} />
                             </Button>
-                            <Button variant="outline" size="icon" aria-label="Xóa" className="text-destructive hover:bg-destructive/10" onClick={() => {}}>
+                            <Button variant="outline" size="icon" aria-label="Xóa" className="text-destructive hover:bg-destructive/10" onClick={() => setDeleteId(p.id)}>
                               <Trash2 size={16} />
                             </Button>
                           </div>
@@ -291,6 +394,91 @@ export default function Products() {
           </div>
         )}
       </CardContent>
+
+      {/* Add/Edit Product Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <h2 className="text-xl font-bold mb-4">{editId ? "Sửa sản phẩm" : "Thêm mới sản phẩm"}</h2>
+              {errorMsg && <div className="p-3 mb-4 text-sm text-red-600 bg-red-50 rounded-md">{errorMsg}</div>}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Mã sản phẩm *</label>
+                    <input required className="w-full border rounded-md px-3 py-2 text-sm" value={formData.ma_sp} onChange={e => setFormData({...formData, ma_sp: e.target.value})} placeholder="VD: SP001" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Tên sản phẩm *</label>
+                    <input required className="w-full border rounded-md px-3 py-2 text-sm" value={formData.ten_sp} onChange={e => setFormData({...formData, ten_sp: e.target.value})} placeholder="Nhập tên sản phẩm" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Danh mục *</label>
+                    <select required className="w-full border rounded-md px-3 py-2 text-sm" value={formData.id_danh_muc} onChange={e => setFormData({...formData, id_danh_muc: e.target.value})}>
+                      {categories.map(c => <option key={c.id} value={c.id}>{c.ten_danh_muc}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Nhà cung cấp *</label>
+                    <select required className="w-full border rounded-md px-3 py-2 text-sm" value={formData.id_nha_cung_cap} onChange={e => setFormData({...formData, id_nha_cung_cap: e.target.value})}>
+                      {suppliers.map(s => <option key={s.id} value={s.id}>{s.ten_ncc}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Đơn vị tính</label>
+                    <select className="w-full border rounded-md px-3 py-2 text-sm" value={formData.don_vi_tinh} onChange={e => setFormData({...formData, don_vi_tinh: e.target.value})}>
+                      <option value="HOP">Hộp</option>
+                      <option value="GOI">Gói</option>
+                      <option value="CHIEC">Chiếc</option>
+                      <option value="THUNG">Thùng</option>
+                      <option value="LON">Lon</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Giá nhập *</label>
+                    <input required type="number" className="w-full border rounded-md px-3 py-2 text-sm" value={formData.gia_nhap} onChange={e => setFormData({...formData, gia_nhap: e.target.value})} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Giá bán *</label>
+                    <input required type="number" className="w-full border rounded-md px-3 py-2 text-sm" value={formData.gia_ban} onChange={e => setFormData({...formData, gia_ban: e.target.value})} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Tồn kho tối thiểu</label>
+                    <input type="number" className="w-full border rounded-md px-3 py-2 text-sm" value={formData.ton_kho_toi_thieu} onChange={e => setFormData({...formData, ton_kho_toi_thieu: e.target.value})} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Hạn sử dụng</label>
+                    <input type="date" className="w-full border rounded-md px-3 py-2 text-sm" value={formData.han_su_dung} onChange={e => setFormData({...formData, han_su_dung: e.target.value})} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Ảnh sản phẩm</label>
+                    <input type="file" accept="image/*" className="w-full border rounded-md px-3 py-1.5 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" onChange={handleFileChange} />
+                    {imageFile && (
+                      <div className="mt-2">
+                        <img src={URL.createObjectURL(imageFile)} alt="Preview" className="h-24 w-24 object-cover rounded-md border" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3 pt-4 border-t mt-6">
+                  <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>Hủy</Button>
+                  <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Đang lưu..." : "Lưu sản phẩm"}</Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Delete */}
+      <ConfirmDialog 
+        isOpen={!!deleteId}
+        title="Xóa sản phẩm"
+        message="Bạn có chắc chắn muốn xóa sản phẩm này? Hành động này không thể hoàn tác."
+        confirmText={isDeleting ? "Đang xóa..." : "Xóa"}
+        onConfirm={handleDeleteExecute}
+        onCancel={() => setDeleteId(null)}
+      />
     </Card>
   );
 }

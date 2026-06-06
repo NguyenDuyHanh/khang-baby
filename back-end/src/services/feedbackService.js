@@ -46,24 +46,26 @@ async function getAllFeedbacks(filters = {}) {
     SELECT COUNT(*) as count
     FROM phieu_phan_hoi_hang_thieu f
     LEFT JOIN phieu_nhap_hang p ON f.id_phieu_nhap = p.id
+    LEFT JOIN nha_cung_cap n ON p.id_nha_cung_cap = n.id
     WHERE 1=1
   `;
 
   let dataQuery = `
-    SELECT f.*, nv.ho_ten as ten_nhan_vien, p.ma_pnh
+    SELECT f.*, nv.ho_ten as ten_nhan_vien, p.ma_pnh, n.ten_ncc
     FROM phieu_phan_hoi_hang_thieu f
     LEFT JOIN nhan_vien nv ON f.id_nhan_vien = nv.id
     LEFT JOIN phieu_nhap_hang p ON f.id_phieu_nhap = p.id
+    LEFT JOIN nha_cung_cap n ON p.id_nha_cung_cap = n.id
     WHERE 1=1
   `;
   const countParams = [];
   const dataParams = [];
 
   if (filters.search) {
-    countQuery += ` AND (f.ma_phht LIKE ? OR p.ma_pnh LIKE ?)`;
-    dataQuery += ` AND (f.ma_phht LIKE ? OR p.ma_pnh LIKE ?)`;
-    countParams.push(`%${filters.search}%`, `%${filters.search}%`);
-    dataParams.push(`%${filters.search}%`, `%${filters.search}%`);
+    countQuery += ` AND (f.ma_phht LIKE ? OR p.ma_pnh LIKE ? OR n.ten_ncc LIKE ?)`;
+    dataQuery += ` AND (f.ma_phht LIKE ? OR p.ma_pnh LIKE ? OR n.ten_ncc LIKE ?)`;
+    countParams.push(`%${filters.search}%`, `%${filters.search}%`, `%${filters.search}%`);
+    dataParams.push(`%${filters.search}%`, `%${filters.search}%`, `%${filters.search}%`);
   }
 
   const [countRows] = await pool.query(countQuery, countParams);
@@ -79,10 +81,11 @@ async function getAllFeedbacks(filters = {}) {
 // Get feedback by ID
 async function getFeedbackById(id) {
   const [feedbacks] = await pool.query(
-    `SELECT f.*, nv.ho_ten as ten_nhan_vien, p.ma_pnh
+    `SELECT f.*, nv.ho_ten as ten_nhan_vien, p.ma_pnh, n.ten_ncc
      FROM phieu_phan_hoi_hang_thieu f
      LEFT JOIN nhan_vien nv ON f.id_nhan_vien = nv.id
      LEFT JOIN phieu_nhap_hang p ON f.id_phieu_nhap = p.id
+     LEFT JOIN nha_cung_cap n ON p.id_nha_cung_cap = n.id
      WHERE f.id = ?`,
     [id]
   );
@@ -92,7 +95,7 @@ async function getFeedbackById(id) {
   const feedback = feedbacks[0];
 
   const [items] = await pool.query(
-    `SELECT ct.*, h.ten_sp, h.sku
+    `SELECT ct.*, h.ten_sp, h.ma_sp AS sku
      FROM chi_tiet_phieu_phan_hoi ct
      LEFT JOIN hang_hoa h ON ct.id_hang_hoa = h.id
      WHERE ct.id_phieu_phan_hoi = ?`,

@@ -24,6 +24,10 @@ const statusBadge = (status) => {
       return <Badge className="bg-blue-100 text-blue-700 border-none font-bold">Đang giao</Badge>;
     case "DA_HOAN_THANH":
       return <Badge className="bg-green-100 text-green-700 border-none font-bold">Đã hoàn thành</Badge>;
+    case "KHACH_DA_NHAN":
+      return <Badge className="bg-teal-100 text-teal-700 border-none font-bold">Thành công</Badge>;
+    case "KHIEU_NAI":
+      return <Badge className="bg-red-100 text-red-700 border-none font-bold">Khiếu nại</Badge>;
     case "DA_HUY":
       return <Badge className="bg-red-100 text-red-700 border-none font-bold">Đã hủy</Badge>;
     default:
@@ -83,6 +87,7 @@ function OrderFormInner({ readOnly = false, paramsId }) {
     eta: "",
     tracking: "",
     paymentMethod: "COD",
+    reason: "",
   });
 
   useEffect(() => {
@@ -122,6 +127,7 @@ function OrderFormInner({ readOnly = false, paramsId }) {
               eta: ord.ngay_giao_du_kien ? ord.ngay_giao_du_kien.slice(0, 10) : "",
               tracking: ord.ma_van_don || "",
               paymentMethod: ord.phuong_thuc_thanh_toan || "COD",
+              reason: ord.ly_do_khieu_nai || "",
             });
           }
         }
@@ -223,7 +229,7 @@ function OrderFormInner({ readOnly = false, paramsId }) {
       });
 
       if (res.ok) {
-        toast.success("Đã tạo đơn hàng online thành công! Trạng thái: CHỜ XỬ LÝ.");
+        toast.success("Đã tạo đơn hàng thành công! Trạng thái: CHỜ XỬ LÝ.");
         navigate("/online");
       } else {
         toast.error(res.message || "Không thể tạo đơn hàng.");
@@ -238,7 +244,7 @@ function OrderFormInner({ readOnly = false, paramsId }) {
   // Order state actions
   const handleConfirm = () => {
     triggerConfirm({
-      title: "Duyệt đơn hàng online",
+      title: "Duyệt đơn hàng",
       message: "Bạn có chắc muốn duyệt đơn hàng này? Số lượng tồn kho sản phẩm tương ứng sẽ được tự động trừ bớt.",
       variant: "primary",
       onConfirm: async () => {
@@ -259,8 +265,8 @@ function OrderFormInner({ readOnly = false, paramsId }) {
 
   const handleCancel = () => {
     triggerConfirm({
-      title: "Hủy đơn hàng online",
-      message: "Bạn có chắc chắn muốn hủy đơn hàng này?",
+      title: "Hủy đơn hàng",
+      message: `Bạn có chắc chắn muốn hủy đơn hàng "${form.ma_don}"?`,
       variant: "danger",
       onConfirm: async () => {
         try {
@@ -280,7 +286,7 @@ function OrderFormInner({ readOnly = false, paramsId }) {
 
   const handleComplete = () => {
     triggerConfirm({
-      title: "Hoàn thành đơn hàng online",
+      title: "Hoàn thành đơn hàng",
       message: "Bạn có chắc chắn muốn đánh dấu hoàn thành giao đơn hàng này?",
       variant: "primary",
       onConfirm: async () => {
@@ -299,6 +305,48 @@ function OrderFormInner({ readOnly = false, paramsId }) {
     });
   };
 
+  const handleCloseComplaint = () => {
+    triggerConfirm({
+      title: "Đóng khiếu nại (Giao thành công)",
+      message: "Xác nhận khách đã nhận được hàng và đóng khiếu nại này?",
+      variant: "primary",
+      onConfirm: async () => {
+        try {
+          const res = await apiRequest(`/orders/${paramsId}/close-complaint`, { method: "POST", token });
+          if (res.ok) {
+            toast.success("Đã đóng khiếu nại thành công!");
+            navigate("/online");
+          } else {
+            toast.error("Lỗi: " + res.message);
+          }
+        } catch (err) {
+          toast.error("Lỗi: " + err.message);
+        }
+      }
+    });
+  };
+
+  const handleRetryDelivery = () => {
+    triggerConfirm({
+      title: "Tiếp tục giao hàng",
+      message: "Chuyển đơn hàng lại trạng thái Đang giao?",
+      variant: "primary",
+      onConfirm: async () => {
+        try {
+          const res = await apiRequest(`/orders/${paramsId}/retry-delivery`, { method: "POST", token });
+          if (res.ok) {
+            toast.success("Đã cập nhật trạng thái giao hàng!");
+            navigate("/online");
+          } else {
+            toast.error("Lỗi: " + res.message);
+          }
+        } catch (err) {
+          toast.error("Lỗi: " + err.message);
+        }
+      }
+    });
+  };
+
   if (loading) {
     return <div className="text-center py-16 text-slate-500">Đang tải thông tin biểu mẫu đơn hàng...</div>;
   }
@@ -308,9 +356,9 @@ function OrderFormInner({ readOnly = false, paramsId }) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-800">
-            {readOnly ? "Chi tiết đơn hàng" : isNew ? "Tạo đơn hàng online mới" : "Chỉnh sửa đơn hàng"}
+            {readOnly ? "Chi tiết đơn hàng" : isNew ? "Tạo đơn hàng mới" : "Chỉnh sửa đơn hàng"}
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">Quản lý giao vận và xuất kho online</p>
+          <p className="text-sm text-muted-foreground mt-1">Quản lý giao vận và xuất kho</p>
         </div>
         <Button variant="outline" asChild>
           <Link to="/online">Quay lại</Link>
@@ -320,6 +368,13 @@ function OrderFormInner({ readOnly = false, paramsId }) {
       {error && (
         <div className="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive font-semibold">
           {error}
+        </div>
+      )}
+
+      {orderStatus === "KHIEU_NAI" && form.reason && (
+        <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 flex items-start gap-3">
+          <div className="font-bold shrink-0 mt-0.5">Khách khiếu nại:</div>
+          <div>{form.reason}</div>
         </div>
       )}
 
@@ -351,9 +406,8 @@ function OrderFormInner({ readOnly = false, paramsId }) {
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-slate-600">Kênh đặt hàng</label>
                 <select className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2" value={form.channel} onChange={setField("channel")} disabled={readOnly}>
-                  <option value="Facebook">Facebook</option>
                   <option value="Website">Website</option>
-                  <option value="Zalo">Zalo</option>
+                  <option value="TRỰC TIẾP">Trực tiếp</option>
                 </select>
               </div>
               <div className="space-y-1.5">
@@ -493,7 +547,7 @@ function OrderFormInner({ readOnly = false, paramsId }) {
                 {!readOnly ? (
                   <div className="flex flex-col gap-2 pt-2">
                     <Button type="button" onClick={handleCreateOrder} className="bg-primary hover:bg-primary/95 text-white w-full">
-                      Tạo & Lưu đơn hàng online
+                      Tạo & Lưu đơn hàng
                     </Button>
                     <Button variant="outline" type="button" onClick={() => navigate("/online")} className="w-full">
                       Thoát
@@ -511,7 +565,20 @@ function OrderFormInner({ readOnly = false, paramsId }) {
                         Hoàn thành giao đơn
                       </Button>
                     )}
-                    {orderStatus !== "DA_HUY" && orderStatus !== "DA_HOAN_THANH" && (
+                    
+                    {/* Các nút xử lý Khiếu nại */}
+                    {orderStatus === "KHIEU_NAI" && (
+                      <>
+                        <Button type="button" onClick={handleCloseComplaint} className="bg-teal-600 hover:bg-teal-700 text-white w-full">
+                          Xác nhận đã giao
+                        </Button>
+                        <Button type="button" onClick={handleRetryDelivery} className="bg-blue-600 hover:bg-blue-700 text-white w-full">
+                          Yêu cầu giao lại
+                        </Button>
+                      </>
+                    )}
+
+                    {orderStatus !== "DA_HUY" && orderStatus !== "DA_HOAN_THANH" && orderStatus !== "KHACH_DA_NHAN" && (
                       <Button type="button" onClick={handleCancel} className="bg-red-600 hover:bg-red-700 text-white w-full">
                         Hủy đơn hàng
                       </Button>

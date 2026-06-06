@@ -1,11 +1,11 @@
 const pool = require('../db');
 
 // Create product
-async function createProduct({ ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_vi_tinh, gia_nhap, gia_ban, ton_kho_toi_thieu, han_su_dung, ngay_nhap_batch }) {
+async function createProduct({ ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_vi_tinh, gia_nhap, gia_ban, ton_kho_toi_thieu, han_su_dung, ngay_nhap_batch, hinh_anh }) {
   const [result] = await pool.query(
-    `INSERT INTO hang_hoa (ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_vi_tinh, gia_nhap, gia_ban, ton_kho_toi_thieu, han_su_dung, ngay_nhap_batch) 
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_vi_tinh, gia_nhap, gia_ban, ton_kho_toi_thieu, han_su_dung, ngay_nhap_batch]
+    `INSERT INTO hang_hoa (ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_vi_tinh, gia_nhap, gia_ban, ton_kho_toi_thieu, han_su_dung, ngay_nhap_batch, hinh_anh) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [ma_sp, ten_sp, id_danh_muc, id_nha_cung_cap, don_vi_tinh, gia_nhap, gia_ban, ton_kho_toi_thieu, han_su_dung, ngay_nhap_batch, hinh_anh || null]
   );
   return result.insertId;
 }

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Pencil, Trash2, Eye, X, Info } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, X, Info, Printer, FileDown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { apiRequest } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { formatCurrencyVND, formatDateVN } from "@/lib/format";
 import { exportToExcel } from "@/lib/export";
+import * as XLSX from "xlsx";
 import { toast } from "sonner";
 import ConfirmDialog from "@/components/ui/confirm-dialog";
 
@@ -227,6 +228,294 @@ export default function Feedback() {
     }
   };
 
+  const handlePrintFeedback = (fb) => {
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+      toast.error("Không thể mở cửa sổ in. Vui lòng cho phép trình duyệt mở popup.");
+      return;
+    }
+    const itemsHtml = (fb.items || []).map((item, idx) => `
+      <tr style="page-break-inside: avoid;">
+        <td style="border: 1px solid #cbd5e1; padding: 10px; text-align: center; color: #475569;">${idx + 1}</td>
+        <td style="border: 1px solid #cbd5e1; padding: 10px; font-weight: 500; color: #1e293b;">${item.sku || item.id_hang_hoa}</td>
+        <td style="border: 1px solid #cbd5e1; padding: 10px; color: #334155;">${item.ten_sp || 'Sản phẩm không xác định'}</td>
+        <td style="border: 1px solid #cbd5e1; padding: 10px; text-align: right; font-weight: bold; color: #1e293b;">${item.so_luong_thieu_hut}</td>
+        <td style="border: 1px solid #cbd5e1; padding: 10px; text-align: right; color: #475569;">${formatCurrencyVND(item.gia_tri_thieu_hut)}</td>
+        <td style="border: 1px solid #cbd5e1; padding: 10px; text-align: right; font-weight: bold; color: #e11d48;">${formatCurrencyVND(Number(item.gia_tri_thieu_hut) * Number(item.so_luong_thieu_hut))}</td>
+      </tr>
+    `).join("");
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Phiếu Phản Hồi Hàng Thiếu - ${fb.ma_phht}</title>
+          <meta charset="utf-8" />
+          <style>
+            @media print {
+              body { margin: 15mm 20mm 15mm 20mm; }
+              .no-print { display: none; }
+            }
+            body { 
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+              color: #1e293b; 
+              margin: 40px; 
+              line-height: 1.5;
+            }
+            .brand-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              border-bottom: 2px solid #334155;
+              padding-bottom: 12px;
+              margin-bottom: 24px;
+            }
+            .brand-title {
+              font-size: 18px;
+              font-weight: 800;
+              color: #0f172a;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+            .brand-subtitle {
+              font-size: 12px;
+              color: #64748b;
+              margin-top: 2px;
+            }
+            .ticket-header { 
+              text-align: center; 
+              margin-bottom: 30px; 
+            }
+            .ticket-title { 
+              font-size: 24px; 
+              font-weight: 800; 
+              text-transform: uppercase; 
+              color: #0f172a; 
+              margin: 0;
+              letter-spacing: 1px;
+            }
+            .ticket-code { 
+              margin-top: 6px; 
+              font-size: 14px; 
+              color: #475569; 
+              font-weight: 500;
+            }
+            .meta-table {
+              width: 100%;
+              margin-bottom: 24px;
+              font-size: 14px;
+              border-collapse: collapse;
+            }
+            .meta-table td {
+              padding: 6px 0;
+              color: #334155;
+            }
+            .meta-label {
+              font-weight: 600;
+              color: #475569;
+              width: 150px;
+            }
+            .meta-value {
+              color: #0f172a;
+            }
+            .details-table { 
+              width: 100%; 
+              border-collapse: collapse; 
+              margin-top: 15px; 
+              font-size: 13px;
+            }
+            .details-table th { 
+              background-color: #f1f5f9; 
+              color: #475569; 
+              font-weight: 700; 
+              text-transform: uppercase;
+              font-size: 11px;
+              letter-spacing: 0.5px;
+              border: 1px solid #cbd5e1;
+              padding: 10px;
+            }
+            .summary-box { 
+              margin-top: 20px; 
+              float: right; 
+              width: 350px; 
+              border: 1px solid #fecdd3; 
+              padding: 14px 18px; 
+              background-color: #fff1f2; 
+              border-radius: 8px; 
+              display: flex; 
+              justify-content: space-between; 
+              align-items: center;
+              box-sizing: border-box;
+            }
+            .summary-label { 
+              font-size: 12px; 
+              font-weight: 700; 
+              color: #be123c; 
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+            .summary-value { 
+              font-size: 18px; 
+              font-weight: 800; 
+              color: #e11d48; 
+            }
+            .signatures { 
+              margin-top: 60px; 
+              display: flex;
+              justify-content: space-between;
+              font-size: 14px; 
+              font-weight: 600; 
+              clear: both; 
+            }
+            .signature-col {
+              text-align: center;
+              width: 45%;
+            }
+            .signature-hint { 
+              font-size: 12px; 
+              color: #64748b; 
+              font-weight: 400;
+              margin-top: 3px;
+              font-style: italic;
+            }
+            .signature-space { 
+              height: 100px; 
+            }
+            .signature-name {
+              font-weight: 700;
+              color: #0f172a;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="brand-header">
+            <div>
+              <div class="brand-title">KHANG BABY SHOP</div>
+              <div class="brand-subtitle">Hệ thống thời trang và đồ dùng mẹ & bé cao cấp</div>
+            </div>
+            <div style="text-align: right; font-size: 12px; color: #64748b;">
+              <div>Liên hệ: 0987.xxx.xxx</div>
+              <div>Địa chỉ: Hà Nội, Việt Nam</div>
+            </div>
+          </div>
+
+          <div class="ticket-header">
+            <div class="ticket-title">PHIẾU PHẢN HỒI HÀNG THIẾU</div>
+            <div class="ticket-code">Mã phiếu phản hồi: <strong style="color: #0f172a;">${fb.ma_phht}</strong></div>
+          </div>
+
+          <table class="meta-table">
+            <tr>
+              <td class="meta-label">Mã phiếu nhập:</td>
+              <td class="meta-value" style="font-weight: 600;">${fb.ma_pnh || '—'}</td>
+              <td class="meta-label" style="padding-left: 40px;">Ngày tạo phản hồi:</td>
+              <td class="meta-value">${formatDateVN(fb.ngay_tao)}</td>
+            </tr>
+            <tr>
+              <td class="meta-label">Nhà cung cấp:</td>
+              <td class="meta-value" style="font-weight: 600; color: #0284c7;">${fb.ten_ncc || '—'}</td>
+              <td class="meta-label" style="padding-left: 40px;">Nhân viên lập phiếu:</td>
+              <td class="meta-value">${fb.ten_nhan_vien || '—'}</td>
+            </tr>
+          </table>
+          
+          <table class="details-table">
+            <thead>
+              <tr>
+                <th style="width: 50px; text-align: center;">STT</th>
+                <th style="width: 110px; text-align: left;">Mã sản phẩm</th>
+                <th style="text-align: left;">Tên sản phẩm</th>
+                <th style="width: 100px; text-align: right;">SL thiếu hụt</th>
+                <th style="width: 140px; text-align: right;">Đơn giá trị thiếu</th>
+                <th style="width: 160px; text-align: right;">Thành tiền thiếu</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsHtml}
+            </tbody>
+          </table>
+
+          <div class="summary-box">
+            <span class="summary-label">Tổng cộng giá trị thiếu:</span>
+            <span class="summary-value">${formatCurrencyVND(fb.tong_thieu_hut)}</span>
+          </div>
+
+          <div class="signatures">
+            <div class="signature-col">
+              <div>Người lập phiếu</div>
+              <div class="signature-hint">(Ký, ghi rõ họ tên)</div>
+              <div class="signature-space"></div>
+              <div class="signature-name">${fb.ten_nhan_vien || '—'}</div>
+            </div>
+            <div class="signature-col">
+              <div>Đại diện Nhà cung cấp</div>
+              <div class="signature-hint">(Ký, đóng dấu xác nhận)</div>
+              <div class="signature-space"></div>
+              <div class="signature-name">................................................</div>
+            </div>
+          </div>
+
+          <script>
+            window.onload = function() {
+              window.print();
+              window.onafterprint = function() { window.close(); };
+            }
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
+  const handleExportFeedbackExcel = (fb) => {
+    try {
+      const rows = [
+        ["PHIẾU PHẢN HỒI HÀNG THIẾU"],
+        [""],
+        ["Mã phiếu phản hồi:", fb.ma_phht, "", "Ngày tạo phản hồi:", formatDateVN(fb.ngay_tao)],
+        ["Mã phiếu nhập:", fb.ma_pnh || "—", "", "Nhân viên tạo:", fb.ten_nhan_vien || "—"],
+        ["Nhà cung cấp:", fb.ten_ncc || "—"],
+        [""],
+        ["DANH SÁCH SẢN PHẨM THIẾU HỤT"],
+        ["STT", "Mã sản phẩm", "Tên sản phẩm", "Số lượng thiếu", "Đơn giá trị thiếu (đ)", "Thành tiền thiếu (đ)"]
+      ];
+
+      (fb.items || []).forEach((item, idx) => {
+        rows.push([
+          idx + 1,
+          item.sku || item.id_hang_hoa,
+          item.ten_sp || "Sản phẩm không xác định",
+          item.so_luong_thieu_hut,
+          item.gia_tri_thieu_hut,
+          Number(item.gia_tri_thieu_hut) * Number(item.so_luong_thieu_hut)
+        ]);
+      });
+
+      rows.push([]);
+      rows.push(["", "", "", "", "Tổng cộng thiếu hụt:", fb.tong_thieu_hut]);
+
+      const worksheet = XLSX.utils.aoa_to_sheet(rows);
+      
+      worksheet["!cols"] = [
+        { wch: 6 },  
+        { wch: 15 }, 
+        { wch: 35 }, 
+        { wch: 15 }, 
+        { wch: 20 }, 
+        { wch: 20 }  
+      ];
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Phiếu phản hồi");
+      
+      XLSX.writeFile(workbook, `Phieu_Phan_Hoi_Thieu_${fb.ma_phht}.xlsx`);
+      toast.success("Xuất file Excel phiếu phản hồi thành công!");
+    } catch (err) {
+      toast.error("Lỗi khi xuất file Excel: " + err.message);
+      console.error(err);
+    }
+  };
+
   const handleToggleActiveItem = (idHangHoa) => {
     setFeedbackItems(prev => ({
       ...prev,
@@ -356,6 +645,7 @@ export default function Feedback() {
                     <tr>
                       <th className="px-4 py-3 text-left font-semibold">Mã Phản Hồi</th>
                       <th className="px-4 py-3 text-left font-semibold">Mã Phiếu Nhập</th>
+                      <th className="px-4 py-3 text-left font-semibold">Nhà cung cấp</th>
                       <th className="px-4 py-3 text-left font-semibold">Nhân viên tạo</th>
                       <th className="px-4 py-3 text-left font-semibold">Ngày tạo</th>
                       <th className="px-4 py-3 text-right font-semibold">Tổng giá trị thiếu hụt</th>
@@ -371,6 +661,7 @@ export default function Feedback() {
                           </button>
                         </td>
                         <td className="px-4 py-3 font-medium text-slate-700">{f.ma_pnh}</td>
+                        <td className="px-4 py-3 text-slate-700">{f.ten_ncc || "—"}</td>
                         <td className="px-4 py-3 text-slate-600">{f.ten_nhan_vien}</td>
                         <td className="px-4 py-3 text-slate-600">{formatDateVN(f.ngay_tao)}</td>
                         <td className="px-4 py-3 text-right font-bold text-destructive">{formatCurrencyVND(f.tong_thieu_hut)}</td>
@@ -382,7 +673,7 @@ export default function Feedback() {
                             <Button variant="outline" size="icon" onClick={() => handleOpenEdit(f)} title="Chỉnh sửa">
                               <Pencil size={16} />
                             </Button>
-                            <Button variant="outline" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => handleDelete(r.id)} title="Xóa">
+                            <Button variant="outline" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => handleDelete(f.id)} title="Xóa">
                               <Trash2 size={16} />
                             </Button>
                           </div>
@@ -391,7 +682,7 @@ export default function Feedback() {
                     ))}
                     {feedbacksList.length === 0 ? (
                       <tr>
-                        <td className="px-4 py-8 text-center text-slate-400" colSpan={6}>
+                        <td className="px-4 py-8 text-center text-slate-400" colSpan={7}>
                           Không có phiếu phản hồi hàng thiếu nào ở trang này.
                         </td>
                       </tr>
@@ -450,7 +741,7 @@ export default function Feedback() {
       {/* POPUP VIEW DETAIL */}
       {viewModalOpen && selectedFeedback && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-3xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
               <div>
                 <h3 className="font-bold text-lg text-slate-800">Chi tiết Phiếu Phản Hồi Hàng Thiếu</h3>
@@ -462,14 +753,18 @@ export default function Feedback() {
             </div>
             
             <div className="p-6 overflow-y-auto space-y-4">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-b pb-4">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm border-b pb-4">
                 <div>
                   <span className="text-slate-400 block text-xs">Mã Phản Hồi</span>
-                  <span className="font-bold text-slate-800">{selectedFeedback.ma_phht}</span>
+                  <span className="font-bold text-primary">{selectedFeedback.ma_phht}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block text-xs">Mã Phiếu Nhập</span>
                   <span className="font-medium text-slate-800">{selectedFeedback.ma_pnh}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-xs">Nhà cung cấp</span>
+                  <span className="font-bold text-slate-800 text-sky-700">{selectedFeedback.ten_ncc || "—"}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block text-xs">Nhân viên tạo</span>
@@ -487,7 +782,7 @@ export default function Feedback() {
                   <table className="w-full text-sm">
                     <thead className="bg-slate-50/70 text-slate-600">
                       <tr>
-                        <th className="px-4 py-2 text-left font-semibold">Mã sản phẩm</th>
+                        <th className="px-4 py-2 text-left font-semibold">Mã sản phẩm / SKU</th>
                         <th className="px-4 py-2 text-left font-semibold">Tên sản phẩm</th>
                         <th className="px-4 py-2 text-right font-semibold">Số lượng thiếu</th>
                         <th className="px-4 py-2 text-right font-semibold">Giá trị thiếu hụt</th>
@@ -497,7 +792,7 @@ export default function Feedback() {
                     <tbody className="divide-y divide-slate-100">
                       {(selectedFeedback.items || []).map((item, idx) => (
                         <tr key={idx} className="hover:bg-slate-50/30">
-                          <td className="px-4 py-3 font-semibold text-slate-800">{item.id_hang_hoa}</td>
+                          <td className="px-4 py-3 font-semibold text-slate-800">{item.sku || item.id_hang_hoa}</td>
                           <td className="px-4 py-3 text-slate-700">{item.ten_sp || "Sản phẩm không xác định"}</td>
                           <td className="px-4 py-3 text-right font-bold text-slate-700">{item.so_luong_thieu_hut}</td>
                           <td className="px-4 py-3 text-right text-slate-800">{formatCurrencyVND(item.gia_tri_thieu_hut)}</td>
@@ -517,7 +812,26 @@ export default function Feedback() {
               </div>
             </div>
 
-            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <Button 
+                  type="button"
+                  variant="outline" 
+                  className="gap-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                  onClick={() => handleExportFeedbackExcel(selectedFeedback)}
+                >
+                  <FileDown size={16} />
+                  Xuất Excel
+                </Button>
+                <Button 
+                  type="button"
+                  className="gap-2 bg-slate-800 hover:bg-slate-700 text-white"
+                  onClick={() => handlePrintFeedback(selectedFeedback)}
+                >
+                  <Printer size={16} />
+                  In phiếu (PDF)
+                </Button>
+              </div>
               <Button variant="outline" onClick={() => setViewModalOpen(false)}>Đóng</Button>
             </div>
           </div>

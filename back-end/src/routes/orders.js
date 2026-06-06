@@ -21,5 +21,7 @@ router.put('/:id', checkRole('MANAGER', 'ONLINE_SALES'), orderController.updateO
 router.post('/:id/confirm', checkRole('MANAGER', 'ONLINE_SALES'), orderController.confirmOrder);
 router.post('/:id/cancel', checkRole('MANAGER', 'ONLINE_SALES'), orderController.cancelOrder);
 router.post('/:id/complete', checkRole('MANAGER', 'ONLINE_SALES'), orderController.completeOrder);
+router.post('/:id/close-complaint', checkRole('MANAGER', 'ONLINE_SALES'), orderController.closeComplaint);
+router.post('/:id/retry-delivery', checkRole('MANAGER', 'ONLINE_SALES'), orderController.retryDelivery);
 
 module.exports = router;

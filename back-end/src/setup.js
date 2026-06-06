@@ -69,7 +69,7 @@ async function ensureTables() {
         password VARCHAR(255) NOT NULL,
         ho_ten VARCHAR(255) NOT NULL,
         so_dien_thoai VARCHAR(20),
-        vai_tro VARCHAR(50) CHECK (vai_tro IN ('MANAGER', 'WAREHOUSE', 'SALES', 'ONLINE_SALES', 'MARKETING')) NOT NULL,
+        vai_tro VARCHAR(50) CHECK (vai_tro IN ('MANAGER', 'WAREHOUSE', 'SALES', 'ONLINE_SALES', 'MARKETING', 'CUSTOMER')) NOT NULL,
         trang_thai VARCHAR(50) DEFAULT 'HOAT_DONG' CHECK (trang_thai IN ('HOAT_DONG', 'KHOA')),
         ngay_tao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -115,6 +115,7 @@ async function ensureTables() {
         ton_kho_toi_thieu INT DEFAULT 10,
         han_su_dung DATE,
         ngay_nhap_batch DATE,
+        hinh_anh VARCHAR(255),
         trang_thai VARCHAR(50) DEFAULT 'HOAT_DONG' CHECK (trang_thai IN ('HOAT_DONG', 'NGUNG_KD')),
         ngay_tao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -227,7 +228,8 @@ async function ensureTables() {
         tien_giam DECIMAL(12, 0) DEFAULT 0,
         tong_thanh_toan DECIMAL(12, 0),
         phuong_thuc_thanh_toan VARCHAR(50) DEFAULT 'COD' CHECK (phuong_thuc_thanh_toan IN ('COD', 'CHUYEN_KHOAN')),
-        trang_thai VARCHAR(50) DEFAULT 'CHO_XU_LY' CHECK (trang_thai IN ('CHO_XU_LY', 'DA_XAC_NHAN', 'DANG_DONG_GOI', 'DANG_GIAO', 'DA_HOAN_THANH', 'DA_HUY')),
+        trang_thai VARCHAR(50) DEFAULT 'CHO_XU_LY' CHECK (trang_thai IN ('CHO_XU_LY', 'DA_XAC_NHAN', 'DANG_DONG_GOI', 'DANG_GIAO', 'DA_HOAN_THANH', 'DA_HUY', 'KHACH_DA_NHAN', 'KHIEU_NAI')),
+        ly_do_khieu_nai TEXT,
         ngay_tao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);

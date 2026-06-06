@@ -8,6 +8,7 @@ import {
   Users,
   LogOut,
   FileText,
+  Contact,
   ChevronDown,
   ChevronRight
 } from 'lucide-react';
@@ -60,6 +61,13 @@ const menuItems = [
     icon: BarChart3,
     path: '/reports',
     allow: ['MANAGER', 'MARKETING']
+  },
+  {
+    id: 'customers',
+    label: 'Khách hàng',
+    icon: Contact,
+    path: '/customers',
+    allow: ['MANAGER', 'SALES', 'ONLINE_SALES']
   },
   {
     id: 'staff',

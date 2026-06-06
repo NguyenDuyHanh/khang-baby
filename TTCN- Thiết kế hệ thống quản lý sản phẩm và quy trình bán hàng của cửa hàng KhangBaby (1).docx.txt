@@ -1,0 +1,1284 @@
+Thiết kế hệ thống quản lý sản phẩm và quy trình bán hàng của cửa hàng KhangBaby
+CHƯƠNG 1: GIỚI THIỆU BÀI TOÁN
+1.1. Giới thiệu đơn vị thực tập 
+1.1.1. Giới thiệu chung
+Shop Khang Baby là một chuỗi cửa hàng cung cấp sản phẩm cho mẹ và bé được thành lập từ năm 2014 với sứ mệnh mang đến những sản phẩm chất lượng, an toàn và phù hợp với nhu cầu của các gia đình có con nhỏ. Hệ thống tập trung vào việc phục vụ các sản phẩm như: sữa, tã/bỉm, đồ sơ sinh, đồ dùng chăm sóc, phụ kiện cho mẹ và bé từ các thương hiệu uy tín trong và ngoài nước.
+Chuỗi cửa hàng này đã phát triển mở rộng với nhiều cơ sở, trong đó có cơ sở tại địa bàn tỉnh Bắc Giang như Shop Khang Baby Chũ. Nhờ tập trung vào chất lượng sản phẩm và dịch vụ khách hàng, thương hiệu đã trở thành lựa chọn quen thuộc cho nhiều gia đình khi mua sắm đồ cho bé yêu. 
+Cơ sở chúng em lựa chọn để nghiên cứu là cơ sở Khang Baby số 838-840 Trường Chinh - phường Chũ - tỉnh Bắc Ninh. Đây là chi nhánh thứ 8 của Khang Baby được thành lập năm 2020. Đội ngũ nhân viên phục vụ tại đây cũng là một điểm cộng lớn, với thái độ thân thiện, nhiệt tình và luôn sẵn sàng hỗ trợ khách hàng một cách chu đáo nhất.Với vị trí thuận lợi, cơ sở vật chất hiện đại và chính sách dịch vụ chuyên nghiệp, chúng em tin rằng shop Khang baby  sẽ không chỉ thu hút đông đảo khách hàng mà còn là nơi giúp doanh nghiệp phát triển tối đa các dịch vụ kinh doanh trong lĩnh vực mẹ và bé.
+1.1.2. Cơ cấu tổ chức 
+Tổng số nhân viên của cơ sở là: 9
+Quản lý cửa hàng: 1
+Quản lý kho : 1
+Nhân viên bán hàng: 3
+Nhân viên sale online: 2
+Nhân viên marketing: 2
+
+Hình 2: Sơ đồ cơ cấu tổ chức shop Khang Baby Chũ
+
+1.1.2.1 : Quản lý cửa hàng
+Chức năng:
+ Điều hành và chịu trách nhiệm toàn bộ hoạt động kinh doanh của cửa hàng.
+Nhiệm vụ chính:
+Lập kế hoạch kinh doanh theo tháng/quý.
+Phân công công việc, giám sát và đánh giá hiệu quả làm việc của nhân viên.
+Kiểm soát doanh thu, chi phí, lợi nhuận.
+Xử lý các vấn đề phát sinh với khách hàng và nội bộ.
+Đề xuất chương trình khuyến mãi, chính sách bán hàng.
+1.1.2.2: Bộ phận Quản lý kho
+Chức năng: Quản lý hàng hóa và đảm bảo nguồn cung ổn định cho hoạt động bán hàng.
+Nhiệm vụ chính:
+Thực hiện nhập – xuất – kiểm kê hàng hóa.
+Theo dõi số lượng tồn kho, hạn sử dụng sản phẩm.
+Báo cáo tình trạng hàng hóa cho quản lý cửa hàng.
+Phối hợp với bộ phận bán hàng và marketing để chuẩn bị hàng cho các chương trình khuyến mãi.
+1.1.2.3 :Bộ phận Bán hàng (Offline)
+Chức năng: Tư vấn và bán sản phẩm trực tiếp tại cửa hàng.
+Nhiệm vụ chính:
+Tư vấn sản phẩm phù hợp với nhu cầu mẹ và bé.
+Sắp xếp, trưng bày hàng hóa khoa học, bắt mắt
+Hỗ trợ thanh toán, chăm sóc khách hàng sau bán.
+Ghi nhận phản hồi của khách hàng để cải thiện dịch vụ.
+1.1.2.4 :Bộ phận Sale Online
+Chức năng: Thực hiện hoạt động kinh doanh qua các kênh trực tuyến.
+Nhiệm vụ chính:
+Tư vấn, chốt đơn qua fanpage, website, sàn thương mại điện tử.
+Theo dõi và xử lý đơn hàng online.
+Chăm sóc khách hàng trước và sau khi mua.
+Phối hợp với marketing để triển khai chương trình quảng cáo online.
+1.1.2.5:Bộ phận Marketing
+Chức năng: Quảng bá thương hiệu và thu hút khách hàng.
+Nhiệm vụ chính:
+Xây dựng nội dung truyền thông (bài viết, hình ảnh, video).
+Quản lý fanpage, chạy quảng cáo.
+Lập kế hoạch và triển khai các chương trình khuyến mãi.
+Phân tích hiệu quả chiến dịch marketing và đề xuất cải tiến.
+1.1.3. Hệ thống thông tin hiện tại của đơn vị 
+Hệ thống thông tin tại Shop mẹ và bé Khang Baby – cơ sở Chũ giữ vai trò trung tâm trong toàn bộ hoạt động kinh doanh, là công cụ kết nối và hỗ trợ phối hợp giữa các bộ phận như bán hàng, sale online, kho, marketing và quản lý cửa hàng. Thông qua hệ thống này, các nghiệp vụ như lập và xử lý đơn hàng, cập nhật tồn kho, quản lý thông tin khách hàng, theo dõi doanh thu và lập báo cáo được thực hiện một cách đồng bộ và chính xác. Hệ thống thông tin không chỉ giúp giảm sai sót trong quá trình nhập xuất hàng, hạn chế tình trạng thiếu hoặc dư tồn kho mà còn cung cấp dữ liệu kịp thời để quản lý đưa ra quyết định về nhập hàng, điều chỉnh giá bán, triển khai chương trình khuyến mãi và xây dựng kế hoạch kinh doanh phù hợp. Đồng thời, việc lưu trữ và khai thác dữ liệu khách hàng còn góp phần nâng cao chất lượng phục vụ và tăng khả năng cạnh tranh của cửa hàng trong bối cảnh phát triển mạnh của thương mại điện tử. Vì vậy, hệ thống thông tin có thể được xem là yếu tố nền tảng, quyết định hiệu quả hoạt động và sự phát triển bền vững của đơn vị.
+1.2. Giới thiệu bài toán
+1.2.1. Lý do chọn bài toán
+Việc lựa chọn đề tài xây dựng và hoàn thiện hệ thống quản lý bán hàng cho cửa hàng KhangBaby cơ sở Chũ xuất phát từ nhu cầu thực tế trong quá trình vận hành và yêu cầu nâng cao hiệu quả quản lý kinh doanh. Với đặc thù kinh doanh đa dạng các mặt hàng mẹ và bé, số lượng sản phẩm lớn và tần suất nhập - xuất hàng thường xuyên, nếu việc quản lý không được thực hiện một cách khoa học và chặt chẽ sẽ dễ phát sinh sai sót, chênh lệch số liệu và gây khó khăn cho công tác kiểm soát.
+Thứ nhất, hệ thống quản lý bán hàng giúp nâng cao độ chính xác trong kiểm soát tồn kho. Thực tế tại cửa hàng vẫn có thể xảy ra chênh lệch giữa số liệu trên phần mềm Sapo và số lượng thực tế do cập nhật chưa kịp thời hoặc sai sót trong quá trình nhập - xuất. Việc hoàn thiện hệ thống với cơ chế kiểm soát và cập nhật theo thời gian thực sẽ giúp hạn chế sai lệch, giảm thất thoát và tăng tính minh bạch trong quản lý.
+Thứ hai, hệ thống giúp kiểm soát hiệu quả các sản phẩm có hạn sử dụng như sữa và thực phẩm cho bé. Nếu theo dõi thủ công, cửa hàng có thể bỏ sót sản phẩm sắp hết hạn hoặc tồn kho lâu ngày. Việc tích hợp chức năng cảnh báo tồn kho thấp và cảnh báo hạn sử dụng sẽ hỗ trợ cửa hàng chủ động xử lý hàng hóa, giảm thiểu rủi ro tài chính và đảm bảo chất lượng sản phẩm cung cấp cho khách hàng.
+Thứ ba, trong bối cảnh cửa hàng kết hợp bán hàng trực tiếp và bán hàng online, việc đồng bộ dữ liệu chưa kịp thời có thể dẫn đến tình trạng hệ thống báo còn hàng nhưng thực tế đã hết hoặc ngược lại. Do đó, việc nghiên cứu và cải tiến hệ thống nhằm đảm bảo đồng bộ dữ liệu chính xác giữa các kênh bán hàng là cần thiết để nâng cao trải nghiệm khách hàng và hạn chế khiếu nại.
+Thứ tư, hệ thống quản lý còn hỗ trợ cung cấp các báo cáo doanh thu, tồn kho và sản phẩm bán chạy một cách nhanh chóng và rõ ràng. Đây là cơ sở quan trọng giúp quản lý cửa hàng đưa ra quyết định nhập hàng, điều chỉnh giá hoặc xây dựng chương trình khuyến mãi phù hợp trong môi trường cạnh tranh ngày càng cao.
+Cuối cùng, việc chuẩn hóa quy trình nhập - xuất - đổi trả và phân quyền rõ ràng giữa các vị trí công việc sẽ giúp giảm sự phụ thuộc vào kinh nghiệm cá nhân, nâng cao tính chuyên nghiệp trong vận hành và tạo nền tảng phát triển ổn định, lâu dài cho cửa hàng.
+1.2.2. Mục tiêu cần đạt được
+Mục tiêu của đề tài là xây dựng và đề xuất giải pháp hoàn thiện hệ thống quản lý bán hàng phù hợp với thực tế hoạt động của cửa hàng. Hệ thống cần đảm bảo quản lý chặt chẽ thông tin sản phẩm, tồn kho, hóa đơn bán hàng, đổi trả và báo cáo doanh thu; đồng thời hỗ trợ đồng bộ dữ liệu giữa bán hàng trực tiếp và bán hàng online nhằm hạn chế sai lệch số liệu.
+Bên cạnh đó, đề tài hướng đến việc chuẩn hóa toàn bộ quy trình nghiệp vụ theo một mô hình thống nhất, từ nhập hàng, lưu kho, bán hàng đến kiểm kê định kỳ. Việc hệ thống hóa quy trình giúp giảm phụ thuộc vào kinh nghiệm cá nhân, hạn chế rủi ro khi thay đổi nhân sự và tăng tính ổn định trong vận hành.
+Hệ thống cũng cần nâng cao hiệu suất làm việc của nhân viên thông qua giao diện dễ sử dụng và thao tác nhanh chóng, rút ngắn thời gian xử lý hóa đơn và kiểm tra tồn kho. Đồng thời, hệ thống phải đảm bảo tính minh bạch thông qua cơ chế phân quyền hợp lý và lưu vết các thao tác quan trọng như chỉnh sửa giá hoặc hủy hóa đơn.
+Cuối cùng, mục tiêu của bài toán là tạo nền tảng phát triển lâu dài, đảm bảo khả năng mở rộng khi quy mô kinh doanh thay đổi và hỗ trợ quản lý ra quyết định dựa trên dữ liệu chính xác.
+1.2.3. Phạm vi nghiên cứu của bài toán
+Phạm vi nghiên cứu tập trung vào hoạt động quản lý bán hàng tại KhangBaby cơ sở Chũ. Nội dung bao gồm phân tích quy trình nhập hàng, cập nhật và kiểm soát tồn kho, bán hàng tại quầy, bán hàng online, xử lý đổi trả, kiểm kê định kỳ và cơ chế phân quyền người dùng trong hệ thống.
+Đề tài chỉ giới hạn trong phạm vi một cửa hàng bán lẻ cụ thể nhằm đảm bảo tính thực tế và khả thi khi triển khai. Nghiên cứu không mở rộng sang quản lý nhiều chi nhánh, không tích hợp sâu với các sàn thương mại điện tử bên ngoài và không xây dựng hệ thống quản trị doanh nghiệp tổng thể.
+1.2.4. Kế hoạch dự án cơ sở
+Dự án được thực hiện nhằm phân tích hiện trạng và đề xuất giải pháp hoàn thiện hệ thống quản lý bán hàng cho cửa hàng. Quá trình thực hiện bao gồm các bước: khảo sát hiện trạng, phân tích yêu cầu, đề xuất giải pháp và đánh giá khả thi.
+Hệ thống được đề xuất sẽ hỗ trợ quản lý thông tin sản phẩm, cập nhật tồn kho theo thời gian thực, quản lý hóa đơn, xử lý đổi trả và cung cấp báo cáo thống kê. Hệ thống cho phép phân quyền giữa quản lý và nhân viên, đồng thời tích hợp chức năng cảnh báo tồn kho thấp và sản phẩm sắp hết hạn nhằm giảm thiểu rủi ro kinh doanh.
+1.2.5. Đánh giá khả thi
+Về tính khả thi kỹ thuật, cửa hàng đã được trang bị máy tính, máy in hóa đơn, máy quét mã vạch và kết nối internet ổn định. Nhân viên có kinh nghiệm sử dụng phần mềm bán hàng nên việc triển khai hoặc nâng cấp hệ thống không gặp trở ngại lớn về mặt công nghệ và có thể thực hiện mà không làm gián đoạn hoạt động kinh doanh.
+Về tính khả thi tài chính, chi phí đầu tư chủ yếu bao gồm phí phần mềm và đào tạo bổ sung, ở mức phù hợp với quy mô cửa hàng. Trong khi đó, lợi ích từ việc giảm thất thoát, kiểm soát tồn kho và hạn chế hàng hết hạn sẽ góp phần bù đắp chi phí đầu tư trong thời gian hợp lý.
+Về tính khả thi quản lý, quy mô cửa hàng vừa phải và số lượng nhân viên không lớn, do đó việc đào tạo, triển khai và kiểm soát thực hiện tương đối thuận lợi. Sự đồng thuận của chủ cửa hàng và nhân viên là điều kiện quan trọng đảm bảo dự án có thể áp dụng hiệu quả trong thực tế.
+Về tính khả thi thị trường, trong môi trường cạnh tranh hiện nay, việc ứng dụng hệ thống quản lý hiệu quả sẽ giúp nâng cao chất lượng phục vụ, đảm bảo độ chính xác trong giao dịch và tăng mức độ hài lòng của khách hàng. Đây là yếu tố quan trọng góp phần duy trì lợi thế cạnh tranh và phát triển bền vững.
+1.3. Tìm hiểu yêu cầu người dùng
+1.3.1. Bảng kế hoạch phỏng vấn
+
+Ngày phỏng vấn: 
+Thời gian phỏng vấn: 
+Người phỏng vấn: Phạm Thu Hà
+Người được phỏng vấn: Hoàng Thanh Sơn - Quản lý cửa hàng KhangBaby cơ sở Chũ - Bắc Giang
+Câu hỏi
+Câu trả lời 
+Câu hỏi 1: Hiện nay cửa hàng đang kinh doanh những mặt hàng nào ạ
+Câu trả lời: Hiện nay bên anh cũng đang kinh doanh một số mặt hàng dành cho mẹ và bé chẳng hạn như sữa, tã bỉm, quần áo, đồ ăn dặm, đồ chơi hay các thiết bị máy móc như máy hâm sữa, máy tiệt trùng, xe đẩy xe tập đi cho bé… Có thể nói là bán đầy đủ các đồ dùng phục vụ cho mẹ và bé.
+Câu hỏi 2: Dạ cho em hỏi hiện tại hàng hóa được lưu trữ ngay tại cửa hàng hay mình có kho riêng ở địa điểm khác ạ?
+Câu trả lời: Hàng hóa bên anh bây giờ được lưu trữ trực tiếp tại cửa hàng, trong đó có khu vực kho riêng phía sau để bảo quản và kiểm soát số lượng tồn. Các sản phẩm khách mua nhiều sẽ được trưng bày phía trước, còn hàng dự trữ được sắp xếp trong kho để thuận tiện cho việc nhập xuất và xử lý đơn hàng. Hiện tại cơ sở Chũ chưa có kho riêng.
+Câu hỏi 3: Dạ em muốn hỏi hiện nay quy trình nhập hàng tại cửa hàng được tiến hành như thế nào ạ và ai là người chịu trách nhiệm quản lý việc này ạ?
+Câu trả lời: Khi cần nhập hàng, quản lý kho sẽ kiểm tra số lượng tồn và lập danh sách các sản phẩm cần bổ sung, sau đó báo lại cho quản lý cửa hàng để phê duyệt. Khi hàng được giao đến, quản lý kho sẽ trực tiếp kiểm tra số lượng, chất lượng và đối chiếu với hóa đơn, nếu đầy đủ sẽ tiến hành nhập kho và cập nhật vào hệ thống. Quản lý kho là người chịu trách nhiệm chính trong việc theo dõi và quản lý quá trình nhập hàng, dưới sự giám sát của quản lý cửa hàng.
+Câu hỏi 4: Dạ em muốn hỏi là không biết mình có gặp phải những khó khăn gì trong việc quản lý các sản phẩm không ạ? Vì theo em biết được là số lượng các dòng sản phẩm bên mình cả ở cửa hàng và ở kho là khá nhiều 
+Câu trả lời: Đúng là do số lượng mặt hàng bên anh khá đa dạng nên trong quá trình quản lý cũng có một số khó khăn nhất định, ví dụ như việc kiểm soát tồn kho chính xác, theo dõi hạn sử dụng đối với các sản phẩm sữa, thực phẩm cho bé hoặc tránh tình trạng thiếu hàng bán chạy nhưng lại dư hàng ít bán. Ngoài ra, khi vừa bán trực tiếp tại cửa hàng vừa xử lý đơn online, nếu cập nhật không kịp thời thì dễ xảy ra chênh lệch số lượng.
+Câu hỏi 5: Hiện tại KhangBaby có đang sử dụng phần mềm gì để quản lý sản phẩm không ạ?
+Câu trả lời: Có, thì hiện tại bên cửa hàng  đang dùng Sapo để quản lý sản phẩm. Nhưng do các chính sách thuế hiện nay nên mong muốn là chuyển sang một phần mềm quản lý sản phẩm khác dễ sử dụng hơn.
+Câu hỏi 6: Dạ em được biết là Sapo sẽ đưa ra các báo cáo thống kê liên quan đến các sản phẩm đã bán được và các sản phẩm tồn kho thì không biết có khi nào xảy ra trường hợp chênh lệch giữa phần mềm quản lý sản phẩm và thực tế không ạ?  Và cửa hàng thường kiểm kê sản phẩm theo định kỳ bao lâu một lần ạ?
+Câu trả lời: Thì trong quá trình sử dụng phần mềm Sapo, đôi khi vẫn có thể xảy ra chênh lệch nhỏ giữa số liệu trên hệ thống và thực tế, nguyên nhân thường do nhân viên quên cập nhật kịp thời khi xuất nhập hàng, nhầm lẫn mã sản phẩm hoặc các trường hợp đổi trả chưa xử lý xong trên phần mềm. Tuy nhiên để tránh những trường hợp này anh cũng yêu cầu luôn đối chiếu thường xuyên.
+Cửa hàng thường thực hiện kiểm kê định kỳ mỗi tháng một lần, ngoài ra sẽ kiểm kê bổ sung khi có nghi ngờ chênh lệch hoặc vào thời điểm cuối quý để đảm bảo số liệu tồn kho chính xác và minh bạch.
+Câu hỏi 7: Khi muốn thêm sản phẩm mới hay thay đổi thông tin sản phẩm trên hệ thống thì quy trình diễn ra như thế nào ạ?
+Câu trả lời: Khi muốn thêm sản phẩm mới lên hệ thống, quản lý cửa hàng sẽ phê duyệt nhập mặt hàng đó trước. Sau khi hàng về, quản lý kho sẽ tạo mã sản phẩm trên phần mềm, nhập đầy đủ thông tin như tên hàng, giá bán, đơn vị tính, nhà cung cấp và số lượng ban đầu. Sau đó sẽ kiểm tra lại thông tin một lần nữa trước khi cho phép bán.
+Trong trường hợp cần thay đổi thông tin sản phẩm như giá bán hoặc mô tả, quản lý cửa hàng sẽ là người quyết định điều chỉnh, còn quản lý kho hoặc nhân viên được phân quyền sẽ cập nhật trực tiếp trên hệ thống để đảm bảo dữ liệu thống nhất và hạn chế sai sót.
+Câu hỏi 8: Ai là người có quyền xem và chỉnh sửa cũng như thêm thông tin sản phẩm ạ?
+Câu trả lời: Hiện tại quyền xem thông tin sản phẩm thì hầu hết nhân viên bán hàng và sale online đều có thể truy cập để tra cứu khi tư vấn khách. Tuy nhiên, quyền chỉnh sửa hoặc thêm mới sản phẩm trên hệ thống chỉ được phân cho quản lý cửa hàng và quản lý kho để đảm bảo tính chính xác và tránh sai sót dữ liệu. Các thao tác thay đổi quan trọng như điều chỉnh giá bán thường phải có sự phê duyệt của quản lý cửa hàng trước khi cập nhật.
+Câu hỏi 9: Khó khăn lớn nhất khi sử dụng Sapo của cửa hàng là gì ạ?
+Câu trả lời: Chắc các em cũng sử dụng rồi nên các em cũng hiểu, lúc ban đầu khi nhìn vào thì thấy thao tác khá phức tạp, khi muốn xem báo cáo, xem số lượng sản phẩm thì cũng phải tìm tòi một lúc mới ra. Anh cũng phải mất thời gian đầu để làm quen, sau đó hướng dẫn lại cho nhân viên bán hàng thì họ cũng phải mất thời gian đầu để tìm hiểu. Nhưng giờ cũng quen quen với thao tác rồi nên mọi thứ cũng khá trơn chu.
+Câu hỏi 10:  Nếu được cải tiến anh mong muốn cải tiến điều gì nhất ạ? Anh có muốn bổ xung thêm tính năng gì để quản lý sản phẩm hiệu quả hơn không ạ?
+Câu trả lời: Nếu mà để cải tiến thì anh cũng rất mong giao diện có thể dễ nhìn, dễ sử dụng hơn, các thống kê báo cáo chi tiết hơn. Có kèm bổ sung thêm các thông báo khi sản phẩm trong kho sắp hết hoặc tồn kho quá lâu, đặc biệt với những sản phẩm có hạn sử dụng thì cũng tốt. Vì giờ việc rà soát các sản phẩm sắp hết date khá là mất thời gian.
+
+
+Ngày phỏng vấn: 10/2/2026
+Thời gian phỏng vấn: 60 phút
+Người phỏng vấn: Hoàng Minh Thu
+Người được phỏng vấn: Linh Thị Tú Uyên - Nhân viên cửa hàng KhangBaby cơ sở 
+Câu hỏi
+Câu trả lời
+Câu hỏi 1: Em được biết là bên mình đang sử dụng Sapo để quản lý sản phẩm đúng không ạ? Chị cho em hỏi khi mà khách hàng hỏi về thông tin sản phẩm thì việc tra cứu thông tin có thuận tiện không ạ?
+Đúng rồi, hiện tại bên chị đang sử dụng Sapo để quản lý sản phẩm và bán hàng. Khi khách hỏi thì thông tin nào mình nhớ được thì mình nói cho khách, không nhớ thì cũng tra cứu thông tin thì việc tra cứu khá thuận tiện, vì trên hệ thống đã lưu sẵn đầy đủ tên sản phẩm, giá bán, số lượng tồn và một số thông tin cơ bản khác. Nhân viên chỉ cần tìm theo tên hoặc mã sản phẩm là có thể xem ngay, nên việc tư vấn cho khách cũng nhanh và chính xác hơn so với quản lý thủ công.
+Câu hỏi 2: Có khi nào xảy ra tình trạng trên hệ thống báo còn hàng nhưng thực tế lại hết hàng hoặc ngược lại không ạ?
+Thỉnh thoảng vẫn có thể xảy ra trường hợp hệ thống báo còn hàng nhưng thực tế lại hết hoặc ngược lại, tuy nhiên tình trạng này không thường xuyên. Nguyên nhân chủ yếu là do cập nhật chưa kịp thời, nhầm lẫn khi bán hàng hoặc các trường hợp đổi trả chưa được xử lý xong trên phần mềm.
+Câu hỏi 3: Khi phát hiện sai thông tin sản phẩm hoặc sai giá chị sẽ xử lý như thế nào và báo cho ai ạ?
+Khi phát hiện sai thông tin sản phẩm hoặc sai giá trên hệ thống, trước tiên bên chị sẽ tạm thời ngưng bán sản phẩm đó nếu sai giá nghiêm trọng để tránh ảnh hưởng đến khách hàng. Sau đó nhân viên sẽ báo ngay cho quản lý cửa hàng để kiểm tra lại thông tin gốc như hóa đơn nhập, bảng giá hoặc chương trình khuyến mãi hiện hành.
+Sau khi xác nhận nguyên nhân, quản lý cửa hàng sẽ quyết định điều chỉnh và phân công quản lý kho hoặc người được phân quyền cập nhật lại thông tin trên hệ thống cho chính xác. Đồng thời bên chị cũng nhắc nhở nhân viên rà soát lại để hạn chế tình trạng tương tự xảy ra lần sau ạ.
+
+Câu hỏi 4: Chị có thể cho em biết thêm về quy trình bán hàng Online của KhangBaby và khi bán hàng thì có hay gặp trục trặc gì trên hệ thống không ạ?
+Câu trả lời: Quy trình bán hàng Online của KhangBaby hiện nay chủ yếu qua Facebook và website. Khi có đơn hàng, nhân viên sẽ kiểm tra thông tin khách, xác nhận lại sản phẩm và số lượng, sau đó tạo đơn trên hệ thống để trừ tồn kho. Tiếp theo là đóng gói hàng và bàn giao cho đơn vị vận chuyển. Sau khi giao thành công, trạng thái đơn hàng sẽ được cập nhật trên hệ thống. 
+Tuy nhiên, đôi khi vẫn xảy ra một số trục trặc như chậm cập nhật tồn kho giữa bán trực tiếp và bán online, hoặc lỗi đồng bộ trạng thái đơn hàng. Ngoài ra, vào giờ cao điểm hệ thống có thể xử lý chậm, gây mất thời gian khi tạo đơn.
+Còn một vấn đề nữa là các mã giảm giá trên Website nhiều khách hàng phản hồi là không sử dụng được. Chị lên kiểm tra thì cũng thấy không áp dụng được mã. Thì vấn đề này cũng chưa có kế hoạch xử lý, có thể là do mã giảm giá hết hiệu lực nhưng vẫn hiển thị.
+
+Câu hỏi 5: Các voucher trên website có được áp dụng khi mua trực tiếp tại cửa hàng không ạ?
+Không em ạ, các Voucher chỉ được áp dụng khi khách hàng mua hàng trên Website còn đối với khách hàng mua hàng trực tiếp thì KhangBaby có các chương trình tích điểm tặng quà hoặc giảm giá vào một số ngày đặc biệt như 20/10, 8/3 hay là Quốc tế thiếu nhi, tết Trung Thu…
+
+1.3.2. Tìm hiểu các quy trình nghiệp vụ
+Thông qua quá trình phỏng vấn quản lý và nhân viên cửa hàng KhangBaby cơ sở Chũ  Bắc Giang, nhóm nghiên cứu đã tìm hiểu và ghi nhận hai quy trình nghiệp vụ chính có liên quan trực tiếp đến hệ thống thông tin của cửa hàng, bao gồm: quy trình quản lý sản phẩm và quy trình bán hàng. Đây là hai hoạt động cốt lõi, ảnh hưởng trực tiếp đến hiệu quả kinh doanh và chất lượng phục vụ khách hàng.
+Thứ nhất, về quy trình quản lý sản phẩm, hiện nay KhangBaby đang kinh doanh đa dạng các mặt hàng dành cho mẹ và bé, hàng hóa được lưu trữ trực tiếp tại cửa hàng, trong đó có khu vực kho riêng phía sau để bảo quản và kiểm soát số lượng tồn. Cửa hàng sử dụng phần mềm Sapo để quản lý sản phẩm, theo dõi tồn kho và thống kê doanh số bán hàng. Tuy nhiên, trong quá trình vận hành vẫn có thể xảy ra chênh lệch nhỏ giữa số liệu trên hệ thống và thực tế do cập nhật chưa kịp thời, nhầm lẫn mã sản phẩm hoặc xử lý đổi trả chưa hoàn tất trên phần mềm. Để hạn chế tình trạng này, cửa hàng thực hiện kiểm kê định kỳ mỗi tháng một lần và kiểm kê bổ sung khi có nghi ngờ chênh lệch hoặc vào cuối quý nhằm đảm bảo tính minh bạch và chính xác của số liệu tồn kho.
+Bên cạnh đó, do số lượng sản phẩm đa dạng và phong phú, cửa hàng gặp một số khó khăn trong việc kiểm soát tồn kho, đặc biệt là theo dõi hạn sử dụng đối với các sản phẩm sữa và thực phẩm cho bé. Ngoài ra, hệ thống hiện tại chưa có chức năng cảnh báo tự động khi sản phẩm sắp hết hàng hoặc tồn kho quá lâu, khiến việc rà soát vẫn phụ thuộc nhiều vào thao tác thủ công.
+Thứ hai, về quy trình bán hàng, KhangBaby thực hiện song song hai hình thức là bán hàng trực tiếp tại cửa hàng và bán hàng online. Đối với bán hàng trực tiếp, khi khách hàng lựa chọn sản phẩm, nhân viên sẽ tra cứu thông tin trên phần mềm Sapo, lập hóa đơn và xác nhận thanh toán trên hệ thống. Đối với bán hàng online, cửa hàng chủ yếu tiếp nhận đơn qua Facebook và website. Khi có đơn hàng, nhân viên sẽ kiểm tra và xác nhận thông tin khách hàng, tạo đơn trên hệ thống để trừ tồn kho, sau đó tiến hành đóng gói và bàn giao cho đơn vị vận chuyển. Tuy nhiên, trong quá trình vận hành vẫn tồn tại một số hạn chế như chậm cập nhật tồn kho giữa bán trực tiếp và bán online, lỗi đồng bộ trạng thái đơn hàng hoặc hệ thống xử lý chậm vào giờ cao điểm. Ngoài ra, một số mã giảm giá trên website vẫn hiển thị nhưng không áp dụng được, gây ảnh hưởng đến trải nghiệm khách hàng.
+Nhìn chung, các quy trình nghiệp vụ tại KhangBaby đã được tổ chức tương đối rõ ràng, có phân công trách nhiệm cụ thể và có sự hỗ trợ của phần mềm quản lý. Tuy nhiên, vẫn tồn tại một số hạn chế liên quan đến kiểm soát dữ liệu, cảnh báo tồn kho và đồng bộ giữa các kênh bán hàng. Đây sẽ là cơ sở quan trọng để phân tích và đề xuất giải pháp cải tiến trong các phần tiếp theo của báo cáo.
+1.3.3. Đánh giá nhận xét quy trình hiện tại
+Mặc dù các quy trình quản lý sản phẩm và bán hàng của KhangBaby được tổ chức tương đối rõ ràng, tuy nhiên, quy trình hiện tại vẫn còn một số hạn chế:
+Thứ nhất, công tác kiểm soát tồn kho vẫn phụ thuộc nhiều vào kiểm kê định kỳ và kinh nghiệm của nhân viên do hệ thống chưa có chức năng cảnh báo tự động khi hàng sắp hết hoặc tồn kho lâu ngày. Điều này có thể dẫn đến thiếu hụt hàng bán chạy hoặc tồn đọng hàng chậm luân chuyển, đặc biệt với các sản phẩm có hạn sử dụng.
+Thứ hai, sự đồng bộ giữa bán hàng trực tiếp và bán hàng online chưa thực sự tối ưu, đôi khi xảy ra chênh lệch tồn kho do cập nhật chưa kịp thời. Đặc biệt, website bán hàng còn xuất hiện lỗi khách hàng không áp dụng được voucher giảm giá dù mã vẫn hiển thị, gây ảnh hưởng đến trải nghiệm mua sắm và làm giảm tỷ lệ hoàn tất đơn hàng. Sự cố này cho thấy hệ thống khuyến mãi và đồng bộ dữ liệu cần được rà soát và cải thiện.
+Thứ ba, việc ra quyết định nhập hàng hiện nay chủ yếu dựa vào kinh nghiệm và quan sát thực tế, chưa khai thác tối đa các báo cáo phân tích dữ liệu từ hệ thống. Điều này làm hạn chế khả năng dự báo nhu cầu và tối ưu hóa tồn kho.
+Tổng thể, quy trình hiện tại của KhangBaby đã đáp ứng được nhu cầu vận hành cơ bản nhưng mức độ tự động hóa và khai thác dữ liệu chưa cao. Do đó, việc nâng cấp hệ thống theo hướng tăng tính đồng bộ, bổ sung chức năng cảnh báo và cải thiện quản lý khuyến mãi là cần thiết để nâng cao hiệu quả quản lý và chất lượng phục vụ khách hàng.
+1.3.4. Đề xuất cải tiến quy trình mới 
+Dựa trên nhu cầu thực tế của cửa hàng KhangBaby và mong muốn sử dụng một hệ thống dễ thao tác hơn, nhóm đề xuất xây dựng một hệ thống quản lý sản phẩm nội bộ quy mô nhỏ. Hệ thống này tập trung hỗ trợ quản lý kho và dữ liệu sản phẩm, đồng thời có thể tích hợp với phần mềm bán hàng hiện tại thay vì thay thế hoàn toàn. Giải pháp này giúp cửa hàng chủ động hơn trong kiểm soát thông tin, đồng thời phù hợp với điều kiện tài chính và quy mô hoạt động.
+Đối với quy trình quản lý sản phẩm, hệ thống mới sẽ tập trung chuẩn hóa và kiểm soát dữ liệu một cách chặt chẽ hơn. Trước hết, cần xây dựng chức năng quản lý danh mục sản phẩm với các thông tin cơ bản như mã sản phẩm, tên sản phẩm, nhà cung cấp, giá nhập, giá bán, số lượng tồn…. Việc chuẩn hóa thông tin giúp hạn chế trùng lặp, sai sót và dễ dàng tra cứu khi cần. Bên cạnh đó, hệ thống cần bổ sung chức năng quản lý nhập - xuất kho, trong đó mỗi lần nhập hàng hoặc xuất hàng đều được ghi nhận cụ thể theo thời gian và số lượng. Hệ thống sẽ tự động cập nhật số lượng tồn kho sau mỗi giao dịch, giúp giảm thiểu chênh lệch giữa số liệu thực tế và hệ thống. Đối với các sản phẩm có hạn sử dụng như sữa và thực phẩm cho bé, có thể bổ sung trường thông tin về ngày nhập và hạn sử dụng nhằm hỗ trợ theo dõi và ưu tiên xuất bán theo nguyên tắc nhập trước - xuất trước. Ngoài ra, hệ thống nên tích hợp chức năng thiết lập mức tồn kho tối thiểu. Khi số lượng sản phẩm xuống dưới mức quy định, hệ thống sẽ hiển thị cảnh báo để quản lý chủ động lên kế hoạch nhập hàng. Đồng thời, các báo cáo cơ bản như sản phẩm bán chạy, hàng tồn lâu ngày và tổng hợp nhập xuất theo tháng sẽ hỗ trợ việc ra quyết định dựa trên dữ liệu thay vì chỉ dựa vào kinh nghiệm.
+Đối với quy trình bán hàng, hệ thống nội bộ sẽ đóng vai trò hỗ trợ kiểm soát và đồng bộ dữ liệu bán hàng từ phần mềm hiện tại. Sau mỗi ngày hoặc theo chu kỳ định sẵn, dữ liệu bán hàng có thể được cập nhật vào hệ thống quản lý kho để đảm bảo tính chính xác của tồn kho. Việc này giúp hạn chế tình trạng chênh lệch giữa bán trực tiếp và bán online.Ngoài ra, hệ thống có thể bổ sung chức năng theo dõi tình trạng đơn hàng online nhằm đảm bảo việc cập nhật trạng thái kịp thời. Đối với các chương trình khuyến mãi và voucher, cần thiết lập cơ chế kiểm tra điều kiện áp dụng rõ ràng và thử nghiệm trước khi triển khai chính thức để tránh tình trạng khách hàng không sử dụng được mã giảm giá như đã xảy ra trước đó.
+
+CHƯƠNG 2: PHÂN TÍCH HỆ THỐNG 
+2.1. Xác định yêu cầu hệ thống 
+Các quy trình bao gồm 
+Quy trình bán hàng và chăm sóc khách hàng
+Quy trình nhập hàng hoá 
+Quy trình trả hàng lỗi hỏng
+Quy trình kiểm kê hàng hoá 
+Quy trình quản lý hàng tồn kho 
+Các tác nhân tham gia vào quy trình bao gồm:
+Quản lý cửa hàng
+Nhân viên kho 
+Nhân viên bán hàng
+Khách hàng  
+2.2. Phân tích quy trình nghiệp vụ 
+2.2.1. Biểu đồ hoạt động Quy trình đăng nhập/đăng kí 
+
+Hình. Biểu đồ hoạt động Quy trình đăng nhập/đăng kí 
+
+2.2.2. Biểu đồ hoạt động quy trình nhập hàng 
+
+Hình. Biểu đồ hoạt động quy trình nhập hàng 
+
+Mô tả các bước Nhập hàng
+Người thực hiện: Lôi Thị Hương                                                     Ngày lập: 15/03/2026
+STT
+Người thực hiện
+Nội dung thực hiện 
+Mô tả
+HĐ1
+Nhân viên kho
+Tiếp nhận hàng và Kiểm tra thực tế
+
+Nhận hàng từ nhà cung cấp. Kiểm tra số lượng, chủng loại (Sữa, Bỉm, Đồ chơi..) và hạn sử dụng.
+Nếu hàng hỏng/ hết hạn: Trả lại NCC.
+Nếu đạt: Chuyển tiếp đến HĐ2.
+
+HĐ2
+Nhân viên kho
+Kiểm tra sự tồn tại của sản phẩm trên hệ thống
+Tra cứu mã vạch ( Barcode/SKU) trên phần mềm. 
+Nếu sản phẩm chưa có (đặt hàng mới): Chuyển đến HĐ3.
+Nếu sản phẩm đã có: Chuyển đến HĐ4.
+HĐ3
+Quản lý kho
+Thêm mới sản phẩm vào hệ thống
+
+Nhập thông tin mới: Tên sản phẩm, Thương hiệu, Đơn vị tính, Giá nhập, Giá bán lẻ, Ngưỡng tồn kho tối thiểu. Chuyển đến HĐ5
+HĐ4
+Quản lý kho
+Sửa/Cập nhật thông tin sản phẩm
+Cập nhật lại giá nhập mới (nếu có biến động), thay đổi mẫu mã bao bì hoặc chỉnh sửa thông tin mô tả sản phẩm. Chuyển đến HĐ5.
+HĐ5
+Nhân viên kho
+Nhập số lượng và Số lô/Hạn dùng
+Ghi nhận số lượng nhập thực tế vào kho. Bắt buộc nhập số lô và ngày hết hạn( để hệ thống cảnh báo hàng cận date). 
+HĐ6
+Quản lý cửa hàng 
+Phê duyệt nhập kho 
+Rà soát toàn bộ thông tin từ phiếu nhập tạm (HĐ5) đối chiếu với chứng từ của nhà cung cấp.
+- Nếu khớp: Xác nhận phê duyệt trên hệ thống để chính thức cộng tồn kho.
+- Nếu sai: Yêu cầu sửa lại dữ liệu.
+Kết thúc quy trình.
+
+2.2.3. Quy trình bán hàng 
+
+Hình. Biều đồ hoạt động Quy trình bán hàng trực tiếp
+Mô tả các bước của quy trình bán hàng 
+Nhân Viên: Phạm Thu Hà
+STT
+Người thực hiện
+Nội dung thực hiện 
+Mô tả
+HĐ1
+Khách hàng
+Mua sản phẩm
+Khách hàng mua hàng tại cửa hàng 
+HĐ2
+Nhân viên bán hàng
+Xác nhận đơn hàng
+Nhân viên tiếp nhận nhu cầu mua hàng từ khách hàng, tư vấn sản phẩm và xác nhân số lượng trong đơn đặt hàng của khách hàng
+HĐ3
+Nhân viên bán hàng
+Kiểm tra tình trạng sản phẩm 
+Kiểm tra tình trạng lỗi, tình trạng còn hàng của sản phẩm. 
+Nếu không đạt chuyển tiếp đến HĐ4
+Nếu đạt chuyển tiếp đến HĐ5
+HĐ4
+Nhân viên bán hàng
+Thông báo tình trạng đơn hàng
+Thông báo cho khách về việc đơn hàng không đạt điều kiện, giải thích lý do không thể thực hiện đơn hàng, tư vấn khách hàng đổi món mới
+Nếu khách hàng đồng ý, chuyển qua HĐ5
+Nếu khách hàng không đồng ý, kết thúc quy trình
+
+HĐ5
+Nhân viên bán hàng
+Lập hoá đơn bán hàng 
+Lập hóa đơn, lưu đầy đủ thông tin đơn hàng (sản phẩm, số lượng, giá, khách hàng)
+HĐ6
+Khách hàng 
+Thanh toán hoá đơn 
+Khách hàng thực hiện thanh toán (tiền mặt/chuyển khoản). Nếu thanh toán thất bại -> yêu cầu thanh toán lại. Thanh toán thành công chuyển sang HĐ7
+HĐ7
+Nhân viên bán hàng
+Giao hàng
+Giao hàng trực tiếp tại cửa hàng hoặc xác nhận giao hàng online
+
+2.2.3. Quy trình chăm sóc khách hàng 
+
+
+
+STT
+Người thực hiện
+Nội dung thực hiện
+Mô tả
+HĐ1
+Khách hàng
+Gửi khiếu nại 
+Khiếu nại sản phẩm trực tiếp tại cửa hàng hoặc thông qua website
+HĐ2
+Nhân viên bán hàng
+Tiếp nhận khiếu nại 
+Ghi nhận thông tin khiếu nại, kiểm tra nội dung và xác nhận với khách hàng
+HĐ3
+Nhân viên 
+Kiểm tra thông tin 
+Kiểm tra đơn hàng, tình trạng sản phẩm và chính sách bảo hành/đổi trả- Vấn đề không thuộc trách nhiệm của cửa hàng chuyển tiếp đến HĐ4
+Vấn đề thuộc trách nhiệm của cửa hàng chuyển đến HĐ5
+HĐ4
+Nhân viên 
+Từ chối khiếu nại 
+Thông báo lý do không xử lý, hướng dẫn khách hàng liên hệ bên liên quan (nhà sản xuất, vận chuyển,...)Kết thúc quy trình 
+HĐ5
+Nhân viên
+Đề xuất phương án xử lý
+Đưa ra hướng xử lý: đổi hàng, trả hàng, hoàn tiền hoặc hỗ trợ kỹ thuật
+HĐ6
+Quản lý
+Phê duyệt
+Xác nhận và phê duyệt đề xuất của nhân viên
+HĐ7
+Nhân viên
+Thực hiện xử lý
+Tiến hành đổi/trả/hoàn tiền theo phương án đã duyệt
+HĐ8
+Nhân viên
+Phản hồi khách hàng
+Thông báo kết quả xử lý và xác nhận sự hài lòngNếu khách hàng hài lòng kết thúc quy trình Nếu khách hàng không hài lòng quay lại HĐ5.
+
+2.2.4. Quy trình hoàn trả hàng bị lỗi 
+
+2.2.5. Quy trình kiểm kê hàng hoá trong kho 
+
+Hình. Biều đồ hoạt động Quy trình kiểm kê hàng hóa trong kho
+
+Mô tả các bước Kiểm kê hàng hóa trong kho
+Người thực hiện: Lôi Thị Hương                                                     Ngày lập: 15/03/2026
+STT
+Người thực hiện
+Nội dung thực hiện 
+Mô tả
+HĐ1
+Quản lý kho
+Lập kế hoạch và Xuất phiếu kiểm kê
+Xác định thời điểm kiểm kê (định kỳ tháng/quý). Hệ thống trích xuất danh sách sản phẩm hiện có (Sữa, Bỉm, Đồ dùng...) kèm số lượng tồn kho trên sổ sách. Chuyển đến HĐ2.
+
+HĐ2
+Nhân viên kho
+Kiểm đếm hàng hóa thực tế
+Tiến hành đếm số lượng từng mã hàng tại kệ và kho. Phân loại hàng hóa theo tình trạng: 
+Hàng bình thường.
+Hàng cận date ( dưới 3 tháng) 
+Hàng hư hỏng/ móp méo.
+HĐ3
+Nhân viên kho
+Đối chiếu số liệu
+So sánh số lượng thực đếm với số lượng trên phiếu kiểm kê.
+Nếu khớp: Chuyển đến HĐ5.
+Nếu lệch (thừa/thiếu): Chuyển đến HĐ4.
+HĐ4
+Quản lý kho
+Xác định nguyên nhân và Xử lý chênh lệch
+Tìm hiểu lý do lệch (do nhập liệu sai, quên quét mã khi bán, hoặc thất thoát). Lập biên bản xác nhận và đưa ra phương án xử lý. Chuyển đến HĐ5.
+HĐ5
+Nhân viên kho
+Cập nhật số liệu lên hệ thống
+Nhập số lượng thực tế sau kiểm kê vào phần mềm để đồng bộ dữ liệu. Ghi nhận các mặt hàng hư hỏng vào danh sách thanh lý hoặc hủy hàng.
+HĐ6
+Quản lý cửa hàng
+Phê duyệt và lưu hồ sơ
+Ký duyệt báo cáo kiểm kê cuối cùng. Lưu trữ hồ sơ để phục vụ công việc quản trị và báo cáo tài chính. Kết thúc quy trình.
+
+2.3. Biểu đồ ca sử dụng 
+2.3.1. Biểu đồ ca sử dụng đăng nhập hệ thống 
+
+Biểu đồ ca sử dụng Đăng nhập
+Tên ca sử dụng
+Đăng nhập
+Tác nhân
+Nhân viên
+Điều kiện đầu vào
+Kết nối mạng internet và có tài khoản trên hệ thống
+Nếu chưa có tài khoản vui lòng thực hiện quy trình đăng kí tài khoản.
+Các luồng sự kiện
+Luồng sự kiện chính:
+Tác nhân truy cập vào link website của hệ thống.
+Hệ thống hiển thị form đăng nhập, tác nhân thực hiện nhập thông tin tài khoản và mật khẩu để đăng nhập. (Nếu tác nhân chọn "Quên mật khẩu", chuyển sang Luồng phụ 2).
+Hệ thống kiểm tra tính hợp lệ của thông tin đăng nhập trong cơ sở dữ liệu.
+Nếu thông tin hợp lệ, hệ thống hiển thị màn hình trang chủ bao gồm các danh mục: Dashboard, quản lý khách hàng, quản lý dự án, quản lý hợp đồng, quản lý tài khoản, quản lý phân quyền.
+Nếu thông tin không hợp lệ hoặc thiếu, hệ thống chuyển sang Luồng phụ 1.
+Luồng sự kiện phụ:
+Sự kiện phụ 1 (Sai thông tin):
+Hệ thống thông báo tài khoản chưa tồn tại hoặc sai mật khẩu và yêu cầu tác nhân nhập lại thông tin.
+Sự kiện phụ 2 (Quên mật khẩu):
+Tác nhân nhấn vào nút "Quên mật khẩu".
+Hệ thống yêu cầu nhập email để xác minh tài khoản 
+Tác nhân nhập mã xác nhận từ email, hệ thống kiểm tra tính hợp lệ và hiển thị giao diện thiết lập mật khẩu mới.
+Tác nhân thực hiện nhập mật khẩu mới và xác nhận lại mật khẩu Hệ thống cập nhật mật khẩu mới thành công và chuyển hướng tác nhân quay lại trang đăng nhập.
+Kết quả trả về
+Tác nhân đăng nhập thành công vào hệ thống
+2.3.2. Biểu đồ ca sử dụng đăng kí hệ thống 
+
+Biều đồ ca sử dụng Đăng kí 
+Tên ca sử dụng
+Đăng kí
+Tác nhân
+Nhân viên (người dùng mới)
+Điều kiện đầu vào
+Kết nối mạng internet và chưa có tài khoản trên hệ thống.
+Các luồng sự kiện
+Luồng sự kiện chính:
+Tác nhân truy cập vào link website của hệ thống và chọn chức năng "Đăng kí".
+ Tác nhân nhập các thông tin cần thiết (Họ tên, Email/Tên đăng nhập, Mật khẩu, Nhập lại mật khẩu...).
+ Hệ thống kiểm tra tính hợp lệ của dữ liệu (định dạng email, độ dài mật khẩu, tên đăng nhập đã tồn tại chưa). Nếu hợp lệ thì chuyển bước tiếp theo, nếu không thì chuyển sang luồng sự kiện phụ 2.
+ Hệ thống ghi nhận thông tin vào cơ sở dữ liệu và hiển thị thông báo đăng kí thành công.
+Luồng sự kiện phụ:
+ Sự kiện phụ 2: Hệ thống thông báo lỗi nếu tên đăng nhập đã tồn tại, email không đúng định dạng hoặc mật khẩu nhập lại không khớp. Yêu cầu tác nhân kiểm tra và nhập lại.
+Kết quả trả về
+Tài khoản mới được khởi tạo và chuyển hướng người dùng sang màn hình đăng nhập.
+
+2.3.3. Biểu đồ ca sử dụng Nhập hàng 
+
+
+Tên ca sử dụng:
+Nhập hàng hoá
+Tác nhân:
+Nhân viên kho ,Quản lý kho, Quản lý cửa hàng 
+Điều kiện đầu vào:
+Hàng hóa được vận chuyển đến cửa hàng và tác nhân đã đăng nhập vào hệ thống.
+Các luồng sự kiện:
+Luồng chính:
+Nhân viên kho thực hiện tiếp nhận và kiểm tra hàng thực tế (số lượng, chất lượng, hạn dùng).
+Nhân viên kho thực hiện tra cứu thông tin sản phẩm trên hệ thống để đối soát.
+Hệ thống hiển thị thông tin sản phẩm hiện có.
+Nếu sản phẩm chưa có trên hệ thống, chuyển tiếp đến luồng phụ 1.
+Nếu sản phẩm cần cập nhật lại thông tin, chuyển tiếp đến luồng phụ 2.
+Nhân viên kho thực hiện lập phiếu nhập hàng.
+Hệ thống tự động yêu cầu nhập số lượng, số lô và hạn dùng.
+Quản lý cửa hàng kiểm tra và thực hiện phê duyệt nhập kho.
+Hệ thống thông báo nhập kho thành công và cập nhật số dư kho.
+Luồng phụ:
+Nếu hệ thống không tìm thấy thông tin sản phẩm, nhân viên kho hoặc quản lý kho sẽ tiến hành thêm sản phẩm (nhập tên, đơn vị tính, loại,...) 
+Nếu sản phẩm đã tồn tại nhưng thông tin cũ cần điều chỉnh (thay đổi mô tả, giá, tên, sản phẩm,...) nhân viên thực hiện cập nhật thông tin sản phẩm 
+Kết quả trả về:
+Hệ thống hoàn tất việc ghi nhận lô hàng mới và cập nhật chính xác số lượng tồn kho thực tế.
+
+2.3.4. Biểu đồ ca sử dụng kiểm tra hàng hoá
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+Tên ca sử dụng:
+Kiểm tra hàng hóa
+Tác nhân:
+Nhân viên kho, Quản lý kho, Quản lý cửa hàng
+Điều kiện đầu vào:
+Hàng hoá được chuyển đến kho hàng
+Các luồng sự kiện:
+Luồng chính:
+Quản lý kho thực hiện lập kế hoạch kiểm kê ( xác định thời gian, danh mục sản phẩm cần kiểm kê).
+Nhân viên kho thực hiện kiểm kê hàng hóa thực tế tại kho dựa trên danh sách yêu cầu.
+Nhân viên kho tra cứu thông tin sản phẩm trên hệ thống để lấy số liệu tồn kho.
+Nhân viên kho thực hiện nhập số liệu chi tiết (số lượng thực tế kiểm đếm) vào hệ thống.
+Hệ thống thực hiện đối chiếu số liệu giữa tồn kho và số liệu thực tế vừa nhập. Nếu có sự sai lệch (thừa/thiếu) chuyển đến luồng phụ 1.
+Quản lý kho thực hiện phê duyệt kết quả kiểm kê (xác nhận các con số sau khi đối soát).
+Quản lý cửa hàng thực hiện phê duyệt cuối cùng để xác nhận thay đổi dữ liệu toàn hệ thống.
+Nhân viên kho thực hiện cập nhật số liệu hệ thống để đồng bộ số dư kho mới
+Luồng phụ: 
+ Nếu kết quả đối chiếu tại bước 5 có sai lệch, quản lý kho sẽ thực hithõác định nguyên nhânthoxử lý chênh lệch (ví dụ: do thất thoát, nhầm lẫn mã hàng, hoặc chưa nhập phiếu xuất). Sau khi ghi chú nguyên nhân và điều chỉnh số liệu xử lý, quay lại luồng chính tại bước 6.
+Kết quả trả về:
+Số lượng tồn khi trên hệ thống được cập nhật khớp với số lượng thực tế tại kho. Biên bản kiểm kê được lưu trữ đầy đủ chữ ký phê duyệt điện tử của các cấp quản lý.
+Bảng mô tả kịch bản ca sử dụng Kiểm kê hàng hóa
+2.3.5. Biểu đồ ca sử dụng quy trình lập hoá đơn bán hàng
+
+Biểu đồ ca sử dụng Lập hóa đơn bán hàng
+
+Tên ca sử dụng:
+Lập hoá đơn bán hàng
+Tác nhân:
+Nhân viên bán hàng, khách hàng
+Điều kiện đầu vào:
+Khách hàng mua hàng tại cửa hàng hoặc trên website
+Các luồng sự kiện:
+Luồng chính:
+Khách hàng chọn sản phẩm cần mua (tại cửa hàng hoặc website).
+Nhân viên bán hàng tiếp nhận yêu cầu mua hàng.
+Nhân viên kiểm tra thông tin sản phẩm (giá, số lượng tồn). Nếu sản phẩm không đủ số lượng, chuyển tiếp đến luồng phụ 1.
+Nhân viên nhập thông tin khách hàng (nếu cần).Nếu khách hàng chưa có thông tin chuyển tiếp đến luồng phụ 2
+Nhân viên tạo hóa đơn bán hàng trên hệ thống
+Hệ thống hiển thị thông tin hóa đơn (danh sách sản phẩm, tổng tiền)
+Nhân viên xác nhận hóa đơn với khách hàng
+Khách hàng chọn phương thức thanh toán
+Nhân viên thực hiện thanh toán trên hệ thống
+Hệ thống xác nhận thanh toán thành công. Nếu không thành công chuyển tiếp đến luồng phụ 3
+Nhân viên in hóa đơn hoặc gửi hóa đơn điện tử cho khách hàng
+Luồng phụ:
+Nếu hệ thống kiểm tra và phát hiện sản phẩm không đủ số lượng trong kho, nhân viên bán hàng sẽ thông báo cho khách hàng. Khách hàng có thể lựa chọn sản phẩm khác để tiếp tục mua hàng và quay lại luồng chính 1, hoặc quyết định hủy giao dịch và kết thúc quy trình.
+Nếu hệ thống không tìm thấy thông tin khách hàng, nhân viên bán hàng sẽ tiến hành nhập mới thông tin khách hàng vào hệ thống trước khi tiếp tục lập hóa đơn.
+Nếu quá trình thanh toán không thành công, hệ thống sẽ thông báo lỗi cho nhân viên bán hàng và khách hàng. Khách hàng sẽ được yêu cầu chọn lại phương thức thanh toán khác và quay lại bước 8 để thực hiện lại thanh toán.
+Kết quả trả về:
+Khách hàng thanh toán thành công.
+
+2.3.6. Biểu đồ ca sử dụng Xử lý đơn hàng Online
+2.3.6. Biểu đồ ca sử dụng xử lý khiếu nại 
+
+
+
+
+
+Biểu đồ ca sử dụng Xử lý khiếu nại 
+Tên ca sử dụng:
+Lập phiếu xử lý khiếu nại
+Tác nhân:
+Nhân viên CSKH, khách hàng, quản lý
+Điều kiện đầu vào:
+Khách hàng gửi khiếu nại qua form trên website
+Các luồng sự kiện:
+Luồng chính:
+Nhân viên tiếp nhận khiếu nại từ hệ thống
+Nhân viên CSKH chọn chức năng “Lập phiếu xử lý khiếu nại”.
+Hệ thống hiển thị form nhập thông tin phiếu xử lý.
+Nhân viên nhập thông tin khiếu nại.
+Hệ thống kiểm tra tính hợp lệ của thông tin.Nếu không hợp lệ, chuyển tiếp đến luồng phụ 1
+Nhân viên thực hiện phân loại khiếu nại.
+Nhân viên đề xuất phương án xử lý 
+Nhân viên gửi phương án xử lý đến cho quản lý
+Hệ thống hiển thị trạng thái chờ phê duyệt
+Quản lý phê duyệt phương án xử lý. Nếu quản lý không phê duyệt, chuyển tiếp đến luồng phụ 2 
+Hệ thống hiển thị trạng thái đã phê duyệt 
+Nhân viên gửi xử lý khiếu nại đến cho khách hàng.
+Hệ thống hiển thị trạng thái chờ xác nhận
+Khách hàng xác nhận yêu cầu.Nếu khách hàng không xác nhận chuyển tiếp đến luồng phụ 3. Nếu khách hàng không phản hồi trong thời gian dài chuyển tiếp đến luồng phụ 4.
+Hệ thống cập nhật trạng thái “Hoàn tất” và đóng khiếu nại
+Luồng phụ:
+Nếu thông tin khiếu nại không đầy đủ hoặc không hợp lệ, hệ thống sẽ thông báo lỗi và yêu cầu nhân viên CSKH nhập lại thông tin. Sau khi cập nhật, quy trình quay lại bước 4.
+Nếu quản lý không phê duyệt phương án xử lý, hệ thống sẽ cập nhật trạng thái “Từ chối”. Nhân viên CSKH cần chỉnh sửa lại phương án xử lý và thực hiện gửi lại từ bước 8.
+Nếu khách hàng không đồng ý với kết quả xử lý khiếu nại, hệ thống sẽ cập nhật trạng thái “Chưa xác nhận”. Nhân viên CSKH tiếp nhận phản hồi và có thể điều chỉnh phương án xử lý, sau đó quay lại bước 7.
+Nếu khách hàng không phản hồi trong một khoảng thời gian quy định, hệ thống có thể tự động cập nhật trạng thái “Hoàn tất”
+Kết quả trả về:
+Khiếu nại được xử lý.
+
+2.3.7. Biểu đồ ca sử dụng lập phiếu trả hàng lỗi 
+Tên ca sử dụng:
+Lập phiếu trả hàng lỗi 
+Tác nhân:
+Quản lý cửa hàng, quản lý kho 
+Điều kiện đầu vào:
+Đăng nhập vào hệ thống 
+Các luồng sự kiện:
+Luồng chính:
+Chọn chức năng trả hàng trên hệ thống 
+Hệ thống tự sinh mã phiếu trả và hiển thị form yêu cầu nhập thông tin
+Tác nhân lựa chọn phiếu nhập 
+Hệ thống đưa ra các hàng hoá trong phiếu nhập tương ứng 
+Tác nhân nhập đầy đủ các trường thông tin bao gồm lý do trả hàng. 
+Người dùng ấn “Lưu phiếu trả” . Hệ thống kiểm tra các thông tin vừa nhập, nếu đúng cho phép lưu và tạo ra bản ghi mới trên màn hình phiếu trả. Nếu sai thực hiện luồng phụ 1
+Luồng phụ:
+Trả về thông báo lưu không thành công và yêu cầu kiểm tra lại thông tin 
+Kết quả trả về:
+Cập nhật phiếu trả hàng bị lỗi/hỏng thành công
+
+
+2.4. Biểu đồ tuần tự
+2.4.1. Lập hoá đơn bán hàng 
+
+2.4.2. Xử lý đơn hàng 
+2.4.2. Lập phiếu nhập hàng 
+
+Hình . Biểu đồ tuần tự Lập phiếu nhập hàng 
+
+2.4.3. Lập phiếu trả hàng 
+
+Hình . Biểu đồ tuần tự Lập phiếu trả hàng 
+
+2.4.4. Lập phiếu phản hồi hàng thiếu 
+
+Hình . Biểu đồ tuần tự  Lập phiếu phản hồi hàng thiếu 
+2.4.5. Cập nhật danh sách hàng tồn kho 
+
+Hình . Biểu đồ tuần tự Cập nhật danh sách hàng tồn kho 
+2.4.6. Đăng nhập
+
+
+Biều đồ tuần tự Đăng nhập
+
+                                 Biểu đồ tuần tự Đăng ký
+
+CHƯƠNG 3. THIẾT KẾ HỆ THỐNG 
+3.1. Thiết kế CSDL mức khái niệm 
+Thực thể 
+NHAN_VIEN (Ma_NV, Ten_NV, Chuc_vu, SĐT, Dia_chi, Gioi_tinh, Ngay_sinh)
+KHACH_HANG (Ma_KH, Ten_ KH, Dia_chi, SĐT, Diem_tich_luy)
+SAN_PHAM (Ma_SP, Ten_SP, Gia_nhap, Gia_ban, Mo_ta)
+NHA_CUNG_CAP (Ma_NCC, Ten_ NCC, Dia_chi, SĐT)
+LOAI_HANG (Ma_loai, Ten_loai)
+HOA_DON (Ma_HD, Ngay_lap, Trang_thai, Tong_ tien)
+PHIEU_NHAP (Ma_nhap, Ngay_nhap,Tong_tien_nhap)
+PHIEU_TRA (Ma_tra, Ngay_tra, Ly_do)
+PHIEU_PHAN_HOI_HANG_THIEU (Ma_PPHHT, Ngay_tao, Tong_thieu_hut) 
+KHUYEN_MAI (Ma_khuyen_mai, Chiet_khau, Dieu_kien_ap_dung, Thoi_gian_bat_dau, Thoi_gian_ket_thuc)
+Quan hệ
+NHAN_VIEN <Lập> PHIEU_NHAP (1:N)
+PHIEU_NHAP <Có> SAN_PHAM (N:N) (NSX, HSD, So_luong, Don_gia_nhap)
+NHA_CUNG_CAP <cung cấp> PHIEU_NHAP (1:N)
+NHAN_VIEN <Lập> HOA_DON(1:N)
+HOA_DON <Chứa> SAN_PHAM (N:N) (So_luong, Giam_gia)
+KHACH_HANG <thanh toán> HOA_DON (1:N) (Ma_TT, Phuong_thuc_TT, Ngay_TT, So_tien)
+NHAN_VIEN <Lập> PHIEU_TRA (1:N)
+PHIEU_TRA <Chứa> SAN_PHAM (N:N)  (So_luong, Gia_nhap) 
+PHIEU_TRA <Thuộc> PHIEU_NHAP (1:N)
+NHAN_VIEN <Lập> PHIEU_PHAN_HOI_HANG_THIEU (1:N)
+PHIEU_PHAN_HOI_HANG_THIEU <Chứa> SAN_PHAM (N:N) ( Gia_tri_thieu_hut, So_luong_thieu_hut, Ghi_chu)
+PHIEU_PHAN_HOI_HANG_THIEU <Liên quan> PHIEU_NHAP (1:N)
+SAN_PHAM <Thuộc> LOAI_HANG (1:N)
+MA_KHUYEN_MAI <áp dụng> HOA_DON (1:N)
+
+Hình Sơ đồ thực thể liên kết 
+3.2. Thiết kế CSDL mức logic
+NHAN_VIEN (Ma_NV, Ten_NV, Chuc_vu, SĐT, Dia_chi, Gioi_tinh, Ngay_sinh))
+KHACH_HANG (Ma_KH, Ten_ KH, Dia_chi, SĐT, Diem_tich_luy)
+SAN_PHAM (Ma_ SP, Ma_loai, Ten_SP,  Gia_nhap, Gia_ban, Mo_ta )
+LOAI_HANG (Ma_loai, Ten_loai) 
+NHA_CUNG_CAP (Ma_NCC,Ten_ NCC, Dia_chi, SĐT )
+PHIEU_NHAP (Ma_nhap, Ma_NCC, Ma_NV,  Ngay_nhap,Tong_tien_nhap )
+CHI_TIET_NHAP (Ma_nhap, Mã SP, NSX, HSD, So_luong_nhap, Gia_nhap)
+PHIEU_TRA (Ma_tra, Ma_Nhap, Ma_NV, Ngay_tra, Lý do)
+CHI_TIET_TRA (Ma_tra , Ma_SP, So_luong, Gia_nhap)
+HOA_DON (Ma_HD, Ma_NV, Ma_KH, Ma_KM, Ngay_lap, Trang_thai, Tong_ tien)
+CT_HOA_DON (Ma_HD, Ma_SP, So_luong, Don_gia)
+THANH_TOAN (Ma_TT, Ma_HD, So_tien, Ngày_TT, Phuong_thuc_TT)
+KHUYEN_MAI (Ma_KM, Chiet_khau, Dieu_kien_ap_dung, Thoi_gian_bat_dau, Thoi_gian_ket_thuc)
+PHIEU_PHAN_HOI_HANG_THIEU (Ma_PHHT, Ma_NV, Ma_nhap, Ngay_tao, Tong_thieu_hut)
+CHI_TIET_PHIEU_PHAN_HOI_HANG_THIEU(Ma_PPHHT, Ma_SP, So_luong_thieu_hut, Gia_tri_thieu_hut)
+3.3. Sơ đồ thiết kế CSDL
+
+Hình Sơ đồ thiết kế CSDL 
+3.4. Thiết kế CSDL mức vật lý
+
+NHAN_VIEN 
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_NV
+Mã nhân viên 
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY
+Ten_NV 
+Tên nhân viên
+NVARCHAR
+100
+NOT NULL
+
+Chuc_vu
+Chức vụ
+NVARCHAR
+50
+NOT NULL
+
+SDT
+Số điện thoại 
+VARCHAR
+15
+NOT NULL
+UNIQUE
+Dia_chi
+Địa chỉ
+NVARCHAR
+255
+NULL 
+
+Chuc_vu
+Chức vụ
+NVARCHAR
+10
+NULL 
+
+Ngay_sinh
+Ngày sinh
+DATE
+
+NULL 
+
+
+
+KHACH_HANG
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_KH
+Mã nhân viên 
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY
+Ten_KH
+Tên nhân viên
+NVARCHAR
+100
+NOT NULL
+
+Diem_tich_luy
+Điểm tích lũy
+INT
+
+NOT NULL
+DEFAULT 0
+SDT
+Số điện thoại 
+VARCHAR
+15
+NOT NULL
+UNIQUE
+Dia_chi
+Địa chỉ
+NVARCHAR
+255
+NULL 
+
+
+
+
+
+LOAI_HANG
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_loai
+Mã loại
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY
+Ten_loai
+Tên loại
+NVARCHAR
+100
+NOT NULL
+
+
+
+
+SAN_PHAM
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_SP
+Mã sản phẩm
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY
+Ma_loai
+Mã loại
+VARCHAR
+10
+NOT NULL
+FOREIGN KEY
+Ten_SP
+Tên sản phẩm
+NVARCHAR
+100
+NOT NULL
+
+Gia_ban
+Giá bán
+DECIMAL
+18,2
+NOT NULL
+
+Mo_ta
+Mô tả chi tiết
+NVARCHAR
+MAX
+NULL
+
+
+
+HOA_DON
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_HD
+Mã hóa đơn
+VARCHAR
+15
+NOT NULL
+PRIMARY KEY
+Ma_NV
+Mã nhân viên 
+VARCHAR
+10
+NOT NULL
+FOREIGN KEY
+Ma_KH
+Mã khách hàng
+VARCHAR
+10
+NOT NULL
+FOREIGN KEY
+Ma_khuyen_mai
+Mã khuyến mại
+VARCHAR
+10
+NULL
+FOREIGN KEY
+Ngay_lap
+Ngày lập
+DATETIME
+
+NOT NULL
+DEFAULT GetDate()
+Tong_tien
+Tổng tiền
+DECIMAL
+18,2
+NOT NULL
+
+Trang_thai
+Trạng thái đơn
+
+
+NOT NULL
+
+
+
+NHA_CUNG_CAP
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_NCC
+Mã nhà cung cấp
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY
+Ten_NCC
+Tên nhà cung cấp/ công ty
+NVARCHAR
+100
+NOT NULL
+
+Dia_chi
+Địa chỉ 
+NVARCHAR
+255
+NULL
+
+SDT
+Số điện thoại
+VARCHAR
+15
+NOT NULL
+
+
+
+KHUYEN_MAI
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_khuyen_mai
+Mã khuyến mại
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY
+Chiet_khau
+% hoặc số tiền 
+DECIMAL
+18,2
+NOT NULL
+
+Dieu_kien_ap_dung
+Điều kiện áp dụng
+NVARCHAR
+255
+NULL
+
+Thoi_gian_bat_dau
+Thời gian bắt đầu 
+DATETIME
+
+NOT NULL
+
+Thoi_gian_ket_thuc
+Thời gian kết thúc
+DATETIME
+
+NOT NULL
+
+
+
+
+THANH_TOAN
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_TT
+Mã thanh toán
+VARCHAR
+15
+NOT NULL
+PRIMARY KEY
+Ma_HD
+Mã hóa đơn thanh toán
+VARCHAR
+15
+NOT NULL
+FOREIGN KEY
+Ngay_TT
+Ngày thanh toán
+DATETIME
+
+NOT NULL
+DEFAULT GetDate()
+So_tien
+Số tiền 
+DECIMAL
+18,2
+NOT NULL
+
+Phuong_thuc
+Phương thức thanh toán
+NVARCHAR
+50
+NOT NULL
+
+
+
+PHIEU_TRA
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_tra
+Mã phiếu trả
+VARCHAR
+15
+NOT NULL
+PRIMARY KEY
+Ma_NV
+Mã nhân viên
+VARCHAR
+10
+NOT NULL
+FOREIGN KEY
+Ma_nhap
+Mã phiếu nhập
+VARCHAR
+15
+NOT NULL
+FOREIGN KEY
+Ngay_tra
+Ngày trả
+DATETIME
+
+NOT NULL
+
+Ly_do
+Lý do
+NVARCHAR
+255
+NULL
+
+
+
+
+CHI_TIET_TRA
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_tra
+Mã hóa đơn
+VARCHAR
+15
+NOT NULL
+PRIMARY KEY, FOREIGN KEY
+Ma_SP
+Mã nhân viên 
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY, FOREIGN KEY
+So_luong
+Số lượng
+INT 
+
+NOT NULL
+CHECK > 0
+Gia_nhap
+Đơn giá
+DECIMAL
+18,2
+NOT NULL
+
+
+
+CHI_TIET_HOA_DON
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_HD
+Mã hóa đơn
+VARCHAR
+15
+NOT NULL
+PRIMARY KEY, FOREIGN KEY
+Ma_SP
+Mã nhân viên 
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY, FOREIGN KEY
+So_luong
+Số lượng
+INT 
+
+NOT NULL
+CHECK > 0
+Don_gia
+Đơn giá
+DECIMAL
+18,2
+NOT NULL
+
+
+
+PHIEU_NHAP
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_nhap
+Mã nhập
+VARCHAR
+15
+NOT NULL
+PRIMARY KEY
+Ma_NV
+Mã nhân viên 
+VARCHAR
+10
+NOT NULL
+FOREIGN KEY
+Ma_NCC
+Mã nhà cung cấp 
+VARCHAR
+10
+NOT NULL
+FOREIGN KEY
+Ngay_ngap
+Ngày nhập
+DATETIME
+
+NOT NULL
+
+Tong_tien_nhap
+Tổng tiền nhập
+DECIMAL
+18,2
+NOT NULL
+
+
+
+CHI_TIET_NHAP
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_nhap
+Mã nhập
+VARCHAR
+15
+NOT NULL
+PRIMARY KEY, FOREIGN KEY
+Ma_SP
+Mã sản phẩm
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY, FOREIGN KEY
+NSX
+Ngày sản xuất 
+DATE
+
+NULL
+
+HSD 
+Hạn sử dụng
+DATE
+
+NULL
+
+So_luong_nhap
+Số lượng
+INT 
+
+NOT NULL
+
+Gia_nhap
+Giá nhập vào
+DECIMAL
+18,2
+NOT NULL
+
+
+
+PHIEU_PHAN_HOI_HANG_THIEU
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_PPHHT
+Mã phiếu phản hồi hàng thiếu
+VARCHAR
+15
+NOT NULL
+PRIMARY KEY
+Ma_nhap
+Mã nhập
+VARCHAR
+15
+NOT NULL
+FOREIGN KEY
+Ma_NV
+Mã nhân viên
+VARCHAR
+10
+NOT NULL
+FOREIGN KEY
+Ngay_tao
+Ngày tạo
+DATETIME
+
+NOT NULL
+
+Tong_thieu_hut
+Tổng thiếu hụt
+DECIMAL
+18,2
+NULL
+
+
+
+CHI_TIET_PHIEU_PHAN_HOI_HANG_THIEU
+Tên thuộc tính
+Mô tả 
+Kiểu dữ liệu 
+Kích thước 
+Allow Null
+Ràng buộc 
+Ma_PPHHT
+Mã phiếu phản hồi hàng thiếu
+VARCHAR
+15
+NOT NULL
+PRIMARY KEY, FOREIGN KEY
+Ma_SP
+Mã sản phẩm
+VARCHAR
+10
+NOT NULL
+PRIMARY KEY, FOREIGN KEY
+So_luong_thieu_hut
+Số lượng thực tế thiếu 
+INT 
+
+NOT NULL
+
+Gia_tri_thieu_hut
+Tiền tương ứng bị hụt
+DECIMAL
+18,2
+NULL
+
+
+3.4. Thiết kế giao diện
+Hình Giao diện đăng kí 
+
+Hình Giao diện đăng nhập 
+
+Hình .Giao diện Trang chủ với vai trò Quản lý cửa hàng
+
+Hình. Giao diện danh sách sản phẩm
+
+Hình. Giao diện Hàng tồn kho
+
+Hình. Giao diện Nhập hàng
+
+Hình. Giao diện chi tiết Phiếu nhập hàng
+
+
+Hình. Giao diện Trả hàng
+
+Hình. Giao diên chi tiết Phiếu trả hàng
+
+Hình. Giao diện Phản hồi hàng thiếu
+
+Giao diện chi tiết Phiếu phản hồi hàng thiếu
+
+Giao diện Đơn hàng 
+
+Giao diện Tạo đơn hàng Online thủ công
+
+
+Giao diện hóa đơn bán hàng 
+
+Giao diện tạo đơn hàng bán tại quầy thủ công 
+
+Giao diện báo cáo
+
+Giao diện quản lý tài khoản nhân viên
+
+
+
+CHƯƠNG 4. TRIỂN KHAI HỆ THỐNG
+4.1. Công nghệ sử dụng
+Để hiện thực hóa hệ thống quản lý sản phẩm và quy trình bán hàng cho cửa hàng KhangBaby, nhóm 32 chúng em đã sử dụng những công nghệ sau:
+Công nghệ Front-end (Xử lý giao diện người dùng):
+ReactJS / Next.js: được sử dụng để xây dựng giao diện ứng dụng dạng Single Page Application (SPA), giúp tối ưu hóa tốc độ tải trang, mang lại trải nghiệm mượt mà cho nhân viên và quản lý khi thao tác điều hướng .
+Tailwind CSS / Ant Design: bộ thư viện giao diện giúp chuẩn hóa hệ thống CSS, xây dựng giao diện trực quan, rõ ràng, hiện đại và đáp ứng tốt mong muốn về một phần mềm trực quan, dễ nhìn, dễ sử dụng của người dùng .
+Công nghệ Back-end (Xử lý nghiệp vụ, dữ liệu):
+Node.js: nền tảng phía máy chủ có hiệu năng cao, xử lý bất đồng bộ tốt, phù hợp cho việc tiếp nhận và xử lý luồng dữ liệu liên tục từ các hoạt động tạo hóa đơn, nhập kho theo thời gian thực .
+Hệ quản trị cơ sở dữ liệu:
+PostgreSQL: Hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở mạnh mẽ, có tính toàn vẹn dữ liệu cực cao. Đây là yếu tố cốt lõi để đảm bảo tính chính xác khi lưu trữ các bảng dữ liệu phức tạp như hóa đơn, chi tiết nhập kho, thông tin khách hàng và phân quyền tác nhân mà không xảy ra sai lệch .
+   4.2. Môi trường triển khai
+Hệ thống được cấu hình và vận hành thực tế trong điều kiện cơ sở vật chất sẵn có của cửa hàng KhangBaby cơ sở Chũ nhằm tối ưu chi phí đầu tư :
+Môi trường phần cứng tại cửa hàng:
+Máy tính vận hành: Hệ thống chạy trực tiếp trên các máy tính sẵn có tại quầy bán hàng và phòng kho của cửa hàng thông qua trình duyệt web .
+Thiết bị ngoại vi: Kết nối trực tiếp với máy in hóa đơn tại quầy và máy quét mã vạch để phục vụ việc tra cứu sản phẩm và thanh toán nhanh .
+Môi trường hạ tầng mạng :
+Hạ tầng mạng: Vận hành trên nền tảng Internet ổn định của cửa hàng .
+4.3. Chức năng chính của hệ thống
+Hệ thống quản lý nội bộ mới đã hoàn thiện và cung cấp đầy đủ các phân hệ chức năng đáp ứng chính xác các quy trình nghiệp vụ thực tế :
+Tổng quan (Dashboard): Hiển thị màn hình trung tâm cho Quản lý cửa hàng bao gồm các chỉ số được cập nhật như: Doanh thu trong ngày, số lượng đơn hàng online chờ xử lý, số lượng sản phẩm sắp hết kho và cảnh báo sản phẩm sắp hết hạn sử dụng trong vòng 30 ngày .
+Quản lý sản phẩm và Hàng tồn kho:
+Cho phép lưu trữ danh mục sản phẩm chi tiết (Mã SP, tên, danh mục loại hàng, nhà cung cấp, giá nhập, giá bán).
+Theo dõi chi tiết số lượng tồn kho động, ngày tạo và hiển thị trạng thái "Còn hàng" hoặc "Sắp hết hàng" để nhân viên có thể dễ dàng nhắm bắt.
+Danh sách phiếu:
+Phiếu nhập hàng: Hỗ trợ nhân viên kho tạo phiếu nhập mới, chọn nhà cung cấp, nhập số lượng, ghi nhận ngày sản xuất (NSX) và hạn sử dụng (HSD) bắt buộc để kích hoạt hệ thống cảnh báo hàng cận date .
+Phiếu trả hàng: Xử lý nhanh quy trình hoàn trả hàng lỗi, móp méo vỏ hộp về phía nhà cung cấp, ghi rõ lý do trả và tự động trừ số lượng tồn kho tương ứng .
+Phản hồi hàng thiếu: Lập biên bản điện tử ghi nhận giá trị và số lượng hàng hóa bị hụt so với hóa đơn vận chuyển của nhà cung cấp để đối soát tài chính .
+Quản lý đơn hàng và Hóa đơn:
+Đơn hàng Online: Tiếp nhận, phân loại trạng thái (Chờ xử lý, Đã xác nhận, Đang giao, Đã hoàn thành, Đã hủy) của đơn hàng từ các kênh Facebook, Website, Zalo giúp nhân viên sale online chốt đơn và trừ tồn kho chính xác .
+Hóa đơn bán tại quầy (POS): Giao diện tạo hóa đơn nhanh tại quầy, hỗ trợ quét mã, nhập thông tin khách hàng lẻ, áp dụng mã voucher giảm giá và tính tổng tiền cần thanh toán một cách minh bạch .
+Quản lý nhân viên và Phân quyền: Quản lý danh sách tài khoản toàn cửa hàng, kiểm soát trạng thái hoạt động và thực hiện phân quyền nghiêm ngặt theo vai trò (Quản lý cửa hàng được toàn quyền duyệt phiếu; nhân viên kho, nhân viên sales chỉ được sử dụng các tính năng nghiệp vụ được giao) .
+4.4. Kết luận và hướng phát triển 
+4.4.1. Kết luận
+Sau một thời gian khảo sát thực tế, phân tích yêu cầu người dùng và tiến hành thiết kế, triển khai hệ thống, đề tài "Thiết kế hệ thống quản lý sản phẩm và quy trình bán hàng của cửa hàng KhangBaby" đã hoàn thành các mục tiêu đề ra ban đầu :
+Những kết quả đạt được:
+Xây dựng thành công một phần mềm quản lý nội bộ quy mô nhỏ nhưng tối ưu, sở hữu giao diện trực quan, khoa học và dễ sử dụng hơn rõ rệt so với nền tảng cũ, giảm thiểu thời gian đào tạo nhân viên mới .
+Chuẩn hóa và số hóa toàn bộ quy trình từ nhập hàng, lưu kho, bán hàng tại quầy đến quản lý đơn online và hoàn trả hàng lỗi thành một chuỗi vận hành thống nhất, loại bỏ sự phụ thuộc vào kinh nghiệm cá nhân .
+Giải quyết triệt để các bài toán nhức nhối của cửa hàng nhờ tích hợp thành công bộ đôi tính năng: Cảnh báo tự động khi sản phẩm đạt ngưỡng tồn tối thiểu và Cảnh báo hàng cận hạn sử dụng (date dưới 30 ngày), giúp giảm thiểu tối đa rủi ro tài chính .
+Đảm bảo tính minh bạch thông qua cơ chế phân quyền tài khoản chặt chẽ, hiển thị báo cáo tổng hợp trực quan giúp chủ cửa hàng ra quyết định nhập hàng dựa trên số liệu thực tế .
+Hạn chế của hệ thống: Do giới hạn về mặt thời gian và phạm vi nghiên cứu tập trung vào một cửa hàng bán lẻ cụ thể, hệ thống hiện tại chưa cấu hình để quản lý đồng thời chuỗi nhiều chi nhánh và chưa thực hiện tích hợp sâu vào các sàn thương mại điện tử lớn (Shopee, Lazada, TikTok Shop) .
+4.4.2. Hướng phát triển
+Để phần mềm ngày càng hoàn thiện và đồng hành lâu dài cùng sự phát triển mở rộng của thương hiệu KhangBaby, các hướng cải tiến trong tương lai sẽ tập trung vào:
+Nâng cấp quản trị chuỗi cửa hàng: Phát triển cấu trúc cơ sở dữ liệu để đáp ứng việc quản lý đa chi nhánh, cho phép luân chuyển hàng hóa linh hoạt giữa cơ sở Chũ và các cơ sở khác trong hệ thống KhangBaby .
+Tích hợp đa kênh toàn diện (Omnichannel): Xây dựng các cổng kết nối API trực tiếp với hệ thống quản trị của Facebook, Website và các sàn TMĐT lớn nhằm đồng bộ trạng thái đơn hàng và số lượng tồn kho tự động theo từng giây, loại bỏ hoàn toàn thao tác tạo đơn thủ công.
+Ứng dụng Trí tuệ nhân tạo (AI): Tích hợp các thuật toán phân tích dữ liệu lớn (Big Data) vào phân hệ báo cáo, giúp tự động dự báo nhu cầu tiêu thụ của thị trường theo mùa, từ đó tối ưu hóa lượng hàng tồn kho và tự động thiết lập các chương trình khuyến mãi phù hợp với hành vi mua sắm của khách hàng .
+Hệ thống chăm sóc khách hàng tự động (CRM & Loyalty System): Phát triển phân hệ quản lý quan hệ khách hàng chuyên sâu cho ngành hàng Mẹ và Bé. Hệ thống sẽ tự động gửi tin nhắn SMS/Zalo chúc mừng sinh nhật bé, nhắc lịch mua lại các sản phẩm tiêu hao định kỳ (như bỉm, sữa công thức dựa trên tần suất mua trước đó), và xây dựng cơ chế tích điểm đổi quà thành viên để gia tăng tỷ lệ giữ chân khách hàng. 
+
+

@@ -2,11 +2,11 @@ const pool = require('../db');
 const productService = require('./productService');
 
 // Create invoice
-async function createInvoice({ ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai = 'CHO_XAC_NHAN' }) {
+async function createInvoice({ ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, so_dien_thoai, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai = 'CHO_XAC_NHAN' }) {
   const [result] = await pool.query(
-    `INSERT INTO hoa_don_ban (ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai]
+    `INSERT INTO hoa_don_ban (ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, so_dien_thoai, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [ma_hdb, ngay_ban, id_nhan_vien, id_khach_hang, ten_khach_hang, so_dien_thoai, ma_voucher, tong_tien_hang, tien_giam, tong_can_thanh_toan, phuong_thuc_thanh_toan, trang_thai]
   );
   return result.insertId;
 }

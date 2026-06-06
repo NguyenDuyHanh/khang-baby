@@ -16,14 +16,16 @@ const tabs = [
   { key: "CHO_XU_LY", label: "Chờ xử lý" },
   { key: "DA_XAC_NHAN", label: "Đã xác nhận" },
   { key: "DANG_GIAO", label: "Đang giao" },
-  { key: "DA_HOAN_THANH", label: "Đã hoàn thành" },
+  { key: "DA_HOAN_THANH", label: "Đã giao" },
+  { key: "KHACH_DA_NHAN", label: "Thành công" },
+  { key: "KHIEU_NAI", label: "Khiếu nại" },
   { key: "DA_HUY", label: "Đã hủy" },
 ];
 
 const channelBadge = (channel) => {
   const norm = (channel || "").toUpperCase();
-  if (norm === "FACEBOOK") {
-    return <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 border-none">Facebook</Badge>;
+  if (norm === "TRỰC TIẾP" || norm === "TRUC TIEP") {
+    return <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 border-none">Trực tiếp</Badge>;
   }
   if (norm === "WEBSITE") {
     return <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-100 border-none">Website</Badge>;
@@ -41,6 +43,10 @@ const statusBadge = (status) => {
       return <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 border-none">Đang giao</Badge>;
     case "DA_HOAN_THANH":
       return <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-none">Đã hoàn thành</Badge>;
+    case "KHACH_DA_NHAN":
+      return <Badge className="bg-teal-100 text-teal-700 hover:bg-teal-100 border-none">Thành công</Badge>;
+    case "KHIEU_NAI":
+      return <Badge className="bg-red-100 text-red-700 hover:bg-red-100 border-none">Khiếu nại</Badge>;
     case "DA_HUY":
       return <Badge className="bg-red-100 text-red-700 hover:bg-red-100 border-none">Đã hủy</Badge>;
     default:
@@ -167,8 +173,8 @@ export default function Orders() {
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-800">Đơn hàng Online</h2>
-          <p className="text-sm text-muted-foreground mt-1">Xử lý đơn từ các kênh Facebook, Website và Zalo</p>
+          <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-800">Đơn Hàng</h2>
+          <p className="text-sm text-muted-foreground mt-1">Xử lý đơn từ Website và bán trực tiếp tại cửa hàng</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button
@@ -249,8 +255,8 @@ export default function Orders() {
                 onChange={(e) => { setChannelFilter(e.target.value); setPage(1); }}
               >
                 <option value="ALL">Tất cả kênh</option>
-                <option value="Facebook">Facebook</option>
                 <option value="Website">Website</option>
+                <option value="TRỰC TIẾP">Trực tiếp</option>
               </select>
             </div>
             <div className="hidden lg:block" />
@@ -300,7 +306,7 @@ export default function Orders() {
                                 <Eye size={16} />
                               </Link>
                             </Button>
-                            {o.trang_thai !== "DA_HUY" && o.trang_thai !== "DA_HOAN_THANH" && (
+                            {o.trang_thai !== "DA_HUY" && o.trang_thai !== "DA_HOAN_THANH" && o.trang_thai !== "KHACH_DA_NHAN" && o.trang_thai !== "KHIEU_NAI" && (
                               <Button
                                 variant="outline"
                                 size="icon"

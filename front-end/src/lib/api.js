@@ -27,3 +27,28 @@ export async function apiRequest(path, { method = "GET", body, token, headers, .
 
   return data;
 }
+
+export async function apiUpload(path, formData, { method = "POST", token, headers, ...rest } = {}) {
+  const response = await fetch(`${API_BASE_URL}${normalizePath(path)}`, {
+    method,
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...headers,
+    },
+    body: formData,
+    ...rest,
+  });
+
+  let data = null;
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
+  if (!response.ok) {
+    throw new Error(data?.message || `Request failed with status ${response.status}`);
+  }
+
+  return data;
+}

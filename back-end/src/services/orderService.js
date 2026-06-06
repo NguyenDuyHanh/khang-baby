@@ -200,6 +200,37 @@ async function getRecentOrders(limit = 10) {
   return rows;
 }
 
+// Update order feedback from customer
+async function updateOrderFeedback(orderId, userId, status, reason = null) {
+  // Verify order belongs to user
+  const [orders] = await pool.query(`SELECT id FROM don_hang_online WHERE id = ? AND id_nhan_vien = ?`, [orderId, userId]);
+  if (orders.length === 0) return false;
+
+  let query = `UPDATE don_hang_online SET trang_thai = ?`;
+  const params = [status];
+
+  if (reason) {
+    query += `, ly_do_khieu_nai = ?`;
+    params.push(reason);
+  }
+
+  query += ` WHERE id = ?`;
+  params.push(orderId);
+
+  await pool.query(query, params);
+  return true;
+}
+
+// Get user orders
+async function getUserOrders(userId) {
+  const [rows] = await pool.query(`
+    SELECT * FROM don_hang_online 
+    WHERE id_nhan_vien = ?
+    ORDER BY ngay_dat DESC
+  `, [userId]);
+  return rows;
+}
+
 module.exports = {
   createOrder,
   addOrderItem,
@@ -212,4 +243,6 @@ module.exports = {
   generateOrderId,
   getPendingOrdersCount,
   getRecentOrders,
+  getUserOrders,
+  updateOrderFeedback,
 };

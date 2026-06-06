@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ef608c;
+  --color-secondary: #ffd1e7;
+  --color-topbar: #fdd835;
+  --color-text-primary: #000000;
+  --color-text-secondary: #666666;
+  --color-price: #ef608c;
+  --color-footer: #efefef;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+  }
+
+  body {
+    @apply bg-white text-text-primary antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}

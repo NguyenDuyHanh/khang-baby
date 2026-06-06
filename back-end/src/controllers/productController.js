@@ -51,6 +51,10 @@ async function createProduct(req, res) {
       return res.status(400).json({ ok: false, message: 'Missing required fields' });
     }
 
+    if (req.file) {
+      productData.hinh_anh = `/uploads/products/${req.file.filename}`;
+    }
+
     const id = await productService.createProduct(productData);
 
     res.status(201).json({
@@ -66,7 +70,13 @@ async function createProduct(req, res) {
 // Update product
 async function updateProduct(req, res) {
   try {
-    await productService.updateProduct(req.params.id, req.body);
+    const updateData = req.body;
+    
+    if (req.file) {
+      updateData.hinh_anh = `/uploads/products/${req.file.filename}`;
+    }
+
+    await productService.updateProduct(req.params.id, updateData);
 
     res.json({
       ok: true,

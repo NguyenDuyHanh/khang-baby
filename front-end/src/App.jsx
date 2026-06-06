@@ -22,6 +22,8 @@ import ReceiptView from "@/pages/inventory/ReceiptView";
 import Returns from "@/pages/inventory/Returns";
 import Feedback from "@/pages/inventory/Feedback";
 
+import Customers from "@/pages/customers/Customers";
+
 import Orders from "@/pages/online/Orders";
 import OrderForm from "@/pages/online/OrderForm";
 import OrderView from "@/pages/online/OrderView";
@@ -141,6 +143,15 @@ function App() {
           element={
             <RequireRole allow={["MANAGER", "MARKETING"]}>
               <Reports />
+            </RequireRole>
+          }
+        />
+
+        <Route
+          path="customers"
+          element={
+            <RequireRole allow={["MANAGER", "SALES", "ONLINE_SALES"]}>
+              <Customers />
             </RequireRole>
           }
         />
