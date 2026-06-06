@@ -23,7 +23,7 @@ export default function ProductCard({ product }) {
           </div>
         )}
         <div className="absolute top-2 left-2">
-          {product.gia_nhap < product.gia_ban && (
+          {Number(product.gia_nhap) < Number(product.gia_ban) && (
              <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">HOT</span>
           )}
         </div>
@@ -34,9 +34,9 @@ export default function ProductCard({ product }) {
         </h3>
         <div className="flex items-end justify-between mt-2">
           <div>
-            <p className="text-[var(--color-price)] font-bold text-lg">{formatPrice(product.gia_ban)}</p>
-            {product.gia_nhap > 0 && (
-               <p className="text-gray-400 text-xs line-through">{formatPrice(product.gia_ban + 50000)}</p>
+            <p className="text-[var(--color-price)] font-bold text-lg">{formatPrice(Number(product.gia_ban))}</p>
+            {Number(product.gia_nhap) > 0 && (
+               <p className="text-gray-400 text-xs line-through">{formatPrice(Number(product.gia_ban) + 50000)}</p>
             )}
           </div>
           <button 
