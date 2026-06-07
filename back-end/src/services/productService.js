@@ -132,6 +132,20 @@ async function createCategory(ten_danh_muc, mo_ta = '') {
   return result.insertId;
 }
 
+// Delete category
+async function deleteCategory(id) {
+  await pool.query(
+    `UPDATE danh_muc SET trang_thai = 'KHONG_HOAT_DONG' WHERE id = ?`,
+    [id]
+  );
+  
+  // Cascade delete (soft delete) to products in this category
+  await pool.query(
+    `UPDATE hang_hoa SET trang_thai = 'NGUNG_KD' WHERE id_danh_muc = ?`,
+    [id]
+  );
+}
+
 // Get suppliers
 async function getSuppliers() {
   const [rows] = await pool.query(`
@@ -160,6 +174,7 @@ module.exports = {
   getProductsNearExpiry,
   getCategories,
   createCategory,
+  deleteCategory,
   getSuppliers,
   createSupplier,
 };

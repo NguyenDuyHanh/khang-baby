@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biểu đồ hoạt động - Quy trình bán hàng (Bizagi Style)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'default',
+            flowchart: { useMaxWidth: false, htmlLabels: true }
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .instruction {
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Biểu đồ hoạt động: Quy trình bán hàng trên Website</h2>
+    <p class="instruction">💡 Anh/chị có thể chụp màn hình (nhấn phím <b>Windows + Shift + S</b>) biểu đồ này để dán trực tiếp vào file Word báo cáo.</p>
+    
+    <div class="mermaid">
+flowchart TD
+    %% Định nghĩa phong cách (style) cho các khối giống Bizagi
+    classDef startEnd fill:#8BC34A,stroke:#33691E,stroke-width:2px,color:#fff,font-weight:bold;
+    classDef decision fill:#FFCA28,stroke:#FF8F00,stroke-width:2px,font-weight:bold,color:#333;
+    classDef processKH fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#333;
+    classDef processHT fill:#F3E5F5,stroke:#6A1B9A,stroke-width:2px,color:#333;
+
+    subgraph Khach_Hang [Làn: Khách hàng]
+        direction TB
+        S1((Bắt đầu)):::startEnd --> A1(Tìm kiếm và chọn sản phẩm):::processKH
+        A1 --> A2(Thêm vào giỏ hàng):::processKH
+        A2 --> A3(Tiến hành đặt hàng):::processKH
+        A4(Nhập thông tin giao hàng & Xác nhận):::processKH
+    end
+
+    subgraph He_Thong [Làn: Hệ thống]
+        direction TB
+        H1(Hiển thị form thanh toán & giao hàng):::processHT
+        H2{Kiểm tra thông tin<br> & Tồn kho}:::decision
+        H3(Thông báo lỗi & Yêu cầu cập nhật):::processHT
+        H4(Lưu đơn hàng vào cơ sở dữ liệu):::processHT
+        H5(Gửi thông báo xác nhận đơn hàng):::processHT
+        E1((Kết thúc)):::startEnd
+    end
+
+    %% Liên kết giữa các bước
+    A3 -->|Yêu cầu thanh toán| H1
+    H1 --> A4
+    A4 -->|Gửi thông tin| H2
+    H2 -- Không hợp lệ / Hết hàng --> H3
+    H3 -->|Trở lại form| A4
+    H2 -- Hợp lệ & Còn hàng --> H4
+    H4 --> H5
+    H5 --> E1
+    </div>
+</div>
+
+</body>
+</html>

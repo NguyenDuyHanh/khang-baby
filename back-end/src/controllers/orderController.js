@@ -115,6 +115,20 @@ async function confirmOrder(req, res) {
   }
 }
 
+// Deliver order
+async function deliverOrder(req, res) {
+  try {
+    await orderService.deliverOrder(req.params.id);
+
+    res.json({
+      ok: true,
+      message: 'Order marked as delivering successfully',
+    });
+  } catch (error) {
+    res.status(400).json({ ok: false, message: error.message });
+  }
+}
+
 // Cancel order
 async function cancelOrder(req, res) {
   try {
@@ -178,14 +192,105 @@ async function getRecentOrders(req, res) {
   }
 }
 
+<<<<<<< Updated upstream
+=======
+// Get user orders
+async function getUserOrders(req, res) {
+  try {
+    if (!req.user) return res.status(401).json({ ok: false, message: 'Unauthorized' });
+    const orders = await orderService.getUserOrders(req.user.id);
+    res.json({ ok: true, data: orders });
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error.message });
+  }
+}
+
+// Update user order feedback
+async function updateFeedback(req, res) {
+  try {
+    if (!req.user) return res.status(401).json({ ok: false, message: 'Unauthorized' });
+    const { status, reason } = req.body;
+    
+    if (!['KHACH_DA_NHAN', 'KHIEU_NAI'].includes(status)) {
+      return res.status(400).json({ ok: false, message: 'Invalid status' });
+    }
+    
+    if (status === 'KHIEU_NAI' && !reason) {
+      return res.status(400).json({ ok: false, message: 'Vui lòng cung cấp lý do khiếu nại' });
+    }
+
+    const success = await orderService.updateOrderFeedback(req.params.id, req.user.id, status, reason);
+    if (!success) {
+      return res.status(404).json({ ok: false, message: 'Order not found or unauthorized' });
+    }
+
+    res.json({ ok: true, message: 'Cập nhật thành công' });
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error.message });
+  }
+}
+
+// Resolve complaint - close it and wait for customer confirmation
+async function closeComplaint(req, res) {
+  try {
+    const [order] = await pool.query('SELECT * FROM don_hang_online WHERE id = ?', [req.params.id]);
+    if (order.length === 0) return res.status(404).json({ ok: false, message: 'Not found' });
+    
+    await pool.query('UPDATE don_hang_online SET trang_thai = ?, ly_do_khieu_nai = ?, ngay_hoan_thanh = CURRENT_TIMESTAMP WHERE id = ?', ['DA_HOAN_THANH', 'Đã xử lý khiếu nại, chờ khách xác nhận', req.params.id]);
+    res.json({ ok: true, message: 'Đã cập nhật trạng thái, chờ khách xác nhận lại' });
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error.message });
+  }
+}
+
+// Retry delivery
+async function retryDelivery(req, res) {
+  try {
+    const [order] = await pool.query('SELECT * FROM don_hang_online WHERE id = ?', [req.params.id]);
+    if (order.length === 0) return res.status(404).json({ ok: false, message: 'Not found' });
+    
+    await pool.query('UPDATE don_hang_online SET trang_thai = ?, ly_do_khieu_nai = ? WHERE id = ?', ['DANG_GIAO', 'Tiếp tục giao lại', req.params.id]);
+    res.json({ ok: true, message: 'Đã chuyển trạng thái Đang giao' });
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error.message });
+  }
+}
+
+// Cancel order by customer
+async function cancelUserOrder(req, res) {
+  try {
+    const [orders] = await pool.query('SELECT * FROM don_hang_online WHERE id = ? AND id_nhan_vien = ?', [req.params.id, req.user.id]);
+    if (orders.length === 0) return res.status(404).json({ ok: false, message: 'Not found or unauthorized' });
+    
+    if (orders[0].trang_thai !== 'CHO_XU_LY') {
+      return res.status(400).json({ ok: false, message: 'Chỉ có thể hủy đơn hàng ở trạng thái chờ xử lý' });
+    }
+    
+    await orderService.cancelOrder(req.params.id);
+    res.json({ ok: true, message: 'Đã hủy đơn hàng thành công' });
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error.message });
+  }
+}
+
+>>>>>>> Stashed changes
 module.exports = {
   getAllOrders,
   getOrderById,
   createOrder,
   confirmOrder,
+  deliverOrder,
   cancelOrder,
   completeOrder,
   updateOrder,
   getPendingOrdersCount,
   getRecentOrders,
+<<<<<<< Updated upstream
+=======
+  getUserOrders,
+  updateFeedback,
+  closeComplaint,
+  retryDelivery,
+  cancelUserOrder,
+>>>>>>> Stashed changes
 };

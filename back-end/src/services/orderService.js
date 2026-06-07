@@ -111,6 +111,14 @@ async function confirmOrder(id) {
   );
 }
 
+// Deliver order
+async function deliverOrder(id) {
+  await pool.query(
+    `UPDATE don_hang_online SET trang_thai = 'DANG_GIAO' WHERE id = ?`,
+    [id]
+  );
+}
+
 // Cancel order (reverse stock if already confirmed)
 async function cancelOrder(id) {
   const [orders] = await pool.query(
@@ -141,7 +149,7 @@ async function cancelOrder(id) {
 // Complete order
 async function completeOrder(id) {
   await pool.query(
-    `UPDATE don_hang_online SET trang_thai = 'DA_HOAN_THANH' WHERE id = ?`,
+    `UPDATE don_hang_online SET trang_thai = 'DA_HOAN_THANH', ngay_hoan_thanh = CURRENT_TIMESTAMP WHERE id = ?`,
     [id]
   );
 }
@@ -183,6 +191,7 @@ module.exports = {
   getOrderById,
   updateOrder,
   confirmOrder,
+  deliverOrder,
   cancelOrder,
   completeOrder,
   generateOrderId,
