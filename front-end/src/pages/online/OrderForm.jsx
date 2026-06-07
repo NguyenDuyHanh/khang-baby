@@ -91,6 +91,14 @@ function OrderFormInner({ readOnly = false, paramsId }) {
     const value = key === "qty" || key === "price" ? Number(e.target.value) : e.target.value;
     setForm((prev) => {
       const next = [...prev.items];
+
+      if (key === "qty") {
+        const ton_kho = next[idx].ton_kho;
+        if (value > ton_kho) {
+          toast.warning(`Số lượng xuất (${value}) vượt quá tồn kho hiện tại (${ton_kho}).`);
+        }
+      }
+
       next[idx] = { ...next[idx], [key]: value };
       return { ...prev, items: next };
     });
@@ -106,8 +114,188 @@ function OrderFormInner({ readOnly = false, paramsId }) {
     setForm((prev) => ({ ...prev, items: prev.items.filter((_, i) => i !== idx) }));
   };
 
+<<<<<<< Updated upstream
   const onConfirm = () => navigate("/online", { replace: true });
   const onCancel = () => navigate("/online", { replace: true });
+=======
+  // Create new order
+  const handleCreateOrder = async () => {
+    setError("");
+    const invalid = form.items.find(it => !it.id_hang_hoa || it.qty <= 0);
+    if (invalid) {
+      setError("Vui lòng cấu hình sản phẩm và số lượng mua hợp lệ cho từng dòng.");
+      return;
+    }
+
+    try {
+      const payload = {
+        ten_khach_hang: form.customer,
+        so_dien_thoai: form.phone,
+        dia_chi_giao: form.address,
+        ghi_chu_don: form.note,
+        kenh_dat_hang: form.channel,
+        ma_voucher: form.voucher || null,
+        phi_giao_hang: form.shipFee,
+        don_vi_van_chuyen: form.shipper,
+        ngay_giao_du_kien: form.eta || null,
+        phuong_thuc_thanh_toan: form.paymentMethod,
+        items: form.items.map(it => ({
+          id_hang_hoa: Number(it.id_hang_hoa),
+          gia_ban: it.price,
+          so_luong: it.qty,
+        }))
+      };
+
+      const res = await apiRequest("/orders", {
+        method: "POST",
+        body: payload,
+        token
+      });
+
+      if (res.ok) {
+        toast.success("Đã tạo đơn hàng thành công! Trạng thái: CHỜ XỬ LÝ.");
+        navigate("/online");
+      } else {
+        toast.error(res.message || "Không thể tạo đơn hàng.");
+        setError(res.message || "Không thể tạo đơn hàng.");
+      }
+    } catch (err) {
+      toast.error("Lỗi máy chủ: " + err.message);
+      setError("Lỗi máy chủ kết nối: " + err.message);
+    }
+  };
+
+  // Order state actions
+  const handleConfirm = () => {
+    triggerConfirm({
+      title: "Duyệt đơn hàng",
+      message: "Bạn có chắc muốn duyệt đơn hàng này? Số lượng tồn kho sản phẩm tương ứng sẽ được tự động trừ bớt.",
+      variant: "primary",
+      onConfirm: async () => {
+        try {
+          const res = await apiRequest(`/orders/${paramsId}/confirm`, { method: "POST", token });
+          if (res.ok) {
+            toast.success("Đã duyệt đơn hàng thành công!");
+            navigate("/online");
+          } else {
+            toast.error("Lỗi duyệt đơn: " + res.message);
+          }
+        } catch (err) {
+          toast.error("Lỗi: " + err.message);
+        }
+      }
+    });
+  };
+
+  const handleCancel = () => {
+    triggerConfirm({
+      title: "Hủy đơn hàng",
+      message: `Bạn có chắc chắn muốn hủy đơn hàng "${form.ma_don}"?`,
+      variant: "danger",
+      onConfirm: async () => {
+        try {
+          const res = await apiRequest(`/orders/${paramsId}/cancel`, { method: "POST", token });
+          if (res.ok) {
+            toast.success("Đã hủy đơn hàng thành công!");
+            navigate("/online");
+          } else {
+            toast.error("Lỗi hủy đơn: " + res.message);
+          }
+        } catch (err) {
+          toast.error("Lỗi: " + err.message);
+        }
+      }
+    });
+  };
+
+  const handleDeliver = () => {
+    triggerConfirm({
+      title: "Giao hàng",
+      message: "Bạn có chắc chắn chuyển đơn hàng sang trạng thái đang giao?",
+      variant: "primary",
+      onConfirm: async () => {
+        try {
+          const res = await apiRequest(`/orders/${paramsId}/deliver`, { method: "POST", token });
+          if (res.ok) {
+            toast.success("Đã chuyển trạng thái đang giao!");
+            navigate("/online");
+          } else {
+            toast.error("Lỗi giao đơn: " + res.message);
+          }
+        } catch (err) {
+          toast.error("Lỗi: " + err.message);
+        }
+      }
+    });
+  };
+
+  const handleComplete = () => {
+    triggerConfirm({
+      title: "Hoàn thành đơn hàng",
+      message: "Bạn có chắc chắn muốn đánh dấu hoàn thành giao đơn hàng này?",
+      variant: "primary",
+      onConfirm: async () => {
+        try {
+          const res = await apiRequest(`/orders/${paramsId}/complete`, { method: "POST", token });
+          if (res.ok) {
+            toast.success("Đã hoàn thành đơn hàng!");
+            navigate("/online");
+          } else {
+            toast.error("Lỗi hoàn thành đơn: " + res.message);
+          }
+        } catch (err) {
+          toast.error("Lỗi: " + err.message);
+        }
+      }
+    });
+  };
+
+  const handleCloseComplaint = () => {
+    triggerConfirm({
+      title: "Đóng khiếu nại (Giao thành công)",
+      message: "Xác nhận khách đã nhận được hàng và đóng khiếu nại này?",
+      variant: "primary",
+      onConfirm: async () => {
+        try {
+          const res = await apiRequest(`/orders/${paramsId}/close-complaint`, { method: "POST", token });
+          if (res.ok) {
+            toast.success("Đã đóng khiếu nại thành công!");
+            navigate("/online");
+          } else {
+            toast.error("Lỗi: " + res.message);
+          }
+        } catch (err) {
+          toast.error("Lỗi: " + err.message);
+        }
+      }
+    });
+  };
+
+  const handleRetryDelivery = () => {
+    triggerConfirm({
+      title: "Tiếp tục giao hàng",
+      message: "Chuyển đơn hàng lại trạng thái Đang giao?",
+      variant: "primary",
+      onConfirm: async () => {
+        try {
+          const res = await apiRequest(`/orders/${paramsId}/retry-delivery`, { method: "POST", token });
+          if (res.ok) {
+            toast.success("Đã cập nhật trạng thái giao hàng!");
+            navigate("/online");
+          } else {
+            toast.error("Lỗi: " + res.message);
+          }
+        } catch (err) {
+          toast.error("Lỗi: " + err.message);
+        }
+      }
+    });
+  };
+
+  if (loading) {
+    return <div className="text-center py-16 text-slate-500">Đang tải thông tin biểu mẫu đơn hàng...</div>;
+  }
+>>>>>>> Stashed changes
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -288,12 +476,51 @@ function OrderFormInner({ readOnly = false, paramsId }) {
                     </Button>
                   </div>
                 ) : (
+<<<<<<< Updated upstream
                   <div className="flex flex-col gap-2">
                     <Button type="button" onClick={() => {}}>
                       In phiếu giao hàng
                     </Button>
                     <Button variant="outline" asChild>
                       <Link to={`/online/${paramsId}/edit`}>Sửa</Link>
+=======
+                  <div className="flex flex-col gap-2 pt-2">
+                    {orderStatus === "CHO_XU_LY" && (
+                      <Button type="button" onClick={handleConfirm} className="bg-indigo-600 hover:bg-indigo-700 text-white w-full">
+                        Duyệt đơn & Trừ kho
+                      </Button>
+                    )}
+                    {orderStatus === "DA_XAC_NHAN" && (
+                      <Button type="button" onClick={handleDeliver} className="bg-blue-600 hover:bg-blue-700 text-white w-full">
+                        Giao hàng
+                      </Button>
+                    )}
+                    {orderStatus === "DANG_GIAO" && (
+                      <Button type="button" onClick={handleComplete} className="bg-emerald-600 hover:bg-emerald-700 text-white w-full">
+                        Giao hàng thành công
+                      </Button>
+                    )}
+                    
+                    {/* Các nút xử lý Khiếu nại */}
+                    {orderStatus === "KHIEU_NAI" && (
+                      <>
+                        <Button type="button" onClick={handleCloseComplaint} className="bg-teal-600 hover:bg-teal-700 text-white w-full">
+                          Xác nhận đã giao
+                        </Button>
+                        <Button type="button" onClick={handleRetryDelivery} className="bg-blue-600 hover:bg-blue-700 text-white w-full">
+                          Yêu cầu giao lại
+                        </Button>
+                      </>
+                    )}
+
+                    {orderStatus !== "DA_HUY" && orderStatus !== "DA_HOAN_THANH" && orderStatus !== "KHACH_DA_NHAN" && (
+                      <Button type="button" onClick={handleCancel} className="bg-red-600 hover:bg-red-700 text-white w-full">
+                        Hủy đơn hàng
+                      </Button>
+                    )}
+                    <Button variant="outline" type="button" onClick={() => window.print()} className="w-full">
+                      In nhãn giao hàng
+>>>>>>> Stashed changes
                     </Button>
                   </div>
                 )}

@@ -21,6 +21,7 @@ router.get('/alerts/expiring', productController.getProductsNearExpiry);
 // Categories
 router.get('/categories/list', productController.getCategories);
 router.post('/categories', checkRole('MANAGER', 'WAREHOUSE'), productController.createCategory);
+router.delete('/categories/:id', checkRole('MANAGER', 'WAREHOUSE'), productController.deleteCategory);
 
 // Suppliers
 router.get('/suppliers/list', productController.getSuppliers);

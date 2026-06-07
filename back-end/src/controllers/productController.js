@@ -131,6 +131,20 @@ async function createCategory(req, res) {
   }
 }
 
+// Delete category
+async function deleteCategory(req, res) {
+  try {
+    await productService.deleteCategory(req.params.id);
+
+    res.json({
+      ok: true,
+      message: 'Category deleted successfully',
+    });
+  } catch (error) {
+    res.status(400).json({ ok: false, message: error.message });
+  }
+}
+
 // Get suppliers
 async function getSuppliers(req, res) {
   try {
@@ -172,6 +186,7 @@ module.exports = {
   getProductsNearExpiry,
   getCategories,
   createCategory,
+  deleteCategory,
   getSuppliers,
   createSupplier,
 };

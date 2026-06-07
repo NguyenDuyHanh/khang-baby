@@ -82,6 +82,14 @@ function InvoiceFormInner({ readOnly = false, paramsId }) {
     const value = key === "qty" || key === "price" ? Number(e.target.value) : e.target.value;
     setForm((prev) => {
       const next = [...prev.items];
+
+      if (key === "qty") {
+        const ton_kho = next[idx].ton_kho;
+        if (value > ton_kho) {
+          toast.warning(`Số lượng xuất (${value}) vượt quá tồn kho hiện tại (${ton_kho}).`);
+        }
+      }
+
       next[idx] = { ...next[idx], [key]: value };
       return { ...prev, items: next };
     });

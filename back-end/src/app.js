@@ -36,4 +36,22 @@ app.use((req, res) => {
 // Error handler
 app.use(errorHandler);
 
+const pool = require('./db');
+
+// Auto complete orders after 7 days
+setInterval(async () => {
+  try {
+    const result = await pool.query(`
+      UPDATE don_hang_online 
+      SET trang_thai = 'KHACH_DA_NHAN', ly_do_khieu_nai = 'Hệ thống tự động xác nhận sau 7 ngày'
+      WHERE trang_thai = 'DA_HOAN_THANH' AND ngay_hoan_thanh < CURRENT_TIMESTAMP - INTERVAL '7 days'
+    `);
+    if (result[0] && result[0].rowCount > 0) {
+      console.log(`Auto completed ${result[0].rowCount} orders`);
+    }
+  } catch (err) {
+    console.error('Error in auto-complete orders job:', err);
+  }
+}, 60 * 60 * 1000); // Check every 1 hour
+
 module.exports = app;

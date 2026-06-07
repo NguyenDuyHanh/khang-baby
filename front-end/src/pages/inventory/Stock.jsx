@@ -125,6 +125,7 @@ export default function Stock() {
                       </div>
                     </td>
                   ) : null}
+<<<<<<< Updated upstream
                 </tr>
               ))}
               {rows.length === 0 ? (
@@ -137,6 +138,56 @@ export default function Stock() {
             </tbody>
           </table>
         </div>
+=======
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between border-t border-slate-100 pt-4 flex-wrap gap-2">
+                <span className="text-xs font-semibold text-slate-500">
+                  Hiển thị {(page - 1) * 10 + 1} - {Math.min(page * 10, totalItems)} trong tổng số {totalItems} mặt hàng
+                </span>
+                <div className="flex flex-wrap items-center justify-end gap-1.5">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={page === 1}
+                    onClick={() => setPage(p => Math.max(p - 1, 1))}
+                    className="text-xs"
+                  >
+                    Trước
+                  </Button>
+                  {Array.from({ length: totalPages }).map((_, i) => {
+                    const pNum = i + 1;
+                    return (
+                      <Button
+                        key={pNum}
+                        variant={page === pNum ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setPage(pNum)}
+                        className={`w-8 h-8 p-0 text-xs font-semibold ${page === pNum ? "bg-primary text-white hover:bg-primary/95" : ""}`}
+                      >
+                        {pNum}
+                      </Button>
+                    );
+                  })}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={page === totalPages}
+                    onClick={() => setPage(p => Math.min(p + 1, totalPages))}
+                    className="text-xs"
+                  >
+                    Sau
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+>>>>>>> Stashed changes
       </CardContent>
     </Card>
   );

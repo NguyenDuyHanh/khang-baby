@@ -105,6 +105,7 @@ export default function Receipts() {
             </div>
           </div>
 
+<<<<<<< Updated upstream
           <div className="overflow-x-auto rounded-lg border border-border/60">
             <table className="w-full text-sm">
               <thead className="bg-muted/40 text-muted-foreground">
@@ -139,6 +140,101 @@ export default function Receipts() {
                           <Link to={`/inventory/receipts/${r.id}/edit`} aria-label="Sửa">
                             <Pencil />
                           </Link>
+=======
+          {/* Table */}
+          {loading ? (
+            <div className="text-center py-8 text-slate-500">Đang tải dữ liệu...</div>
+          ) : (
+            <div className="space-y-4">
+              <div className="overflow-x-auto rounded-lg border border-border/60">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold">Mã Nhập</th>
+                      <th className="px-4 py-3 text-left font-semibold">Ngày nhập</th>
+                      <th className="px-4 py-3 text-left font-semibold">Nhà cung cấp</th>
+                      <th className="px-4 py-3 text-left font-semibold">Nhân viên</th>
+                      <th className="px-4 py-3 text-right font-semibold">SL đặt</th>
+                      <th className="px-4 py-3 text-right font-semibold">SL nhận</th>
+                      <th className="px-4 py-3 text-right font-semibold">Tổng tiền</th>
+                      <th className="px-4 py-3 text-left font-semibold">Trạng thái TT</th>
+                      <th className="px-4 py-3 text-right font-semibold">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/60">
+                    {rows.map((r) => (
+                      <tr key={r.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-4 py-3 font-semibold text-slate-800">
+                          <button 
+                            onClick={() => handleViewDetails(r.id)} 
+                            className="hover:underline text-left text-primary font-bold"
+                          >
+                            {r.ma_pnh}
+                          </button>
+                        </td>
+                        <td className="px-4 py-3 text-slate-600">{formatDateVN(r.ngay_nhap)}</td>
+                        <td className="px-4 py-3 text-slate-700">{r.ten_ncc}</td>
+                        <td className="px-4 py-3 text-slate-700">{r.ten_nhan_vien}</td>
+                        <td className="px-4 py-3 text-right text-slate-600">{r.so_luong_dat}</td>
+                        <td className="px-4 py-3 text-right text-slate-600">{r.so_luong_thuc_nhan}</td>
+                        <td className="px-4 py-3 text-right font-semibold text-slate-800">{formatCurrencyVND(r.tong_tien)}</td>
+                        <td className="px-4 py-3">{statusBadge(r.trang_thai_thanh_toan)}</td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center justify-end gap-2">
+                            <Button variant="outline" size="icon" onClick={() => handleViewDetails(r.id)} title="Xem chi tiết">
+                              <Eye size={16} />
+                            </Button>
+                            <Button variant="outline" size="icon" asChild>
+                              <Link to={`/inventory/receipts/${r.id}/edit`} aria-label="Sửa">
+                                <Pencil size={16} />
+                              </Link>
+                            </Button>
+                            <Button variant="outline" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => handleDelete(r.id)} aria-label="Xóa">
+                              <Trash2 size={16} />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {rows.length === 0 ? (
+                      <tr>
+                        <td className="px-4 py-8 text-center text-slate-400" colSpan={9}>
+                          Không có phiếu nhập nào ở trang này.
+                        </td>
+                      </tr>
+                    ) : null}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination UI Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between border-t border-slate-100 pt-4 flex-wrap gap-2">
+                  <span className="text-xs font-semibold text-slate-500">
+                    Hiển thị {(page - 1) * 10 + 1} - {Math.min(page * 10, totalItems)} trong tổng số {totalItems} phiếu nhập
+                  </span>
+                  <div className="flex flex-wrap items-center justify-end gap-1.5">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page === 1}
+                      onClick={() => setPage(p => Math.max(p - 1, 1))}
+                      className="text-xs"
+                    >
+                      Trước
+                    </Button>
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                      const pNum = i + 1;
+                      return (
+                        <Button
+                          key={pNum}
+                          variant={page === pNum ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setPage(pNum)}
+                          className={`w-8 h-8 p-0 text-xs font-semibold ${page === pNum ? "bg-primary text-white hover:bg-primary/95" : ""}`}
+                        >
+                          {pNum}
+>>>>>>> Stashed changes
                         </Button>
                         <Button variant="outline" size="icon" aria-label="Xóa" onClick={() => {}}>
                           <Trash2 />

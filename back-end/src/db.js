@@ -7,9 +7,15 @@ const parsedPort = Number(process.env.DB_PORT || (hostWithoutPath.includes(':') 
 
 const pool = mysql.createPool({
   host: normalizedHost,
+<<<<<<< Updated upstream
   port: Number.isNaN(parsedPort) ? 3306 : parsedPort,
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
+=======
+  port: Number.isNaN(parsedPort) ? 5432 : parsedPort,
+  user: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD !== undefined && process.env.DB_PASSWORD !== null ? String(process.env.DB_PASSWORD) : '12345678',
+>>>>>>> Stashed changes
   database: process.env.DB_NAME || 'khang_baby',
   waitForConnections: true,
   connectionLimit: 10,

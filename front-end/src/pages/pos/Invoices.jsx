@@ -154,6 +154,76 @@ export default function Invoices() {
                           <Link to={`/pos/${inv.id}/edit`} aria-label="Sửa">
                             <Pencil />
                           </Link>
+<<<<<<< Updated upstream
+=======
+                        </td>
+                        <td className="px-4 py-3 text-slate-600">{formatDateVN(inv.ngay_ban)}</td>
+                        <td className="px-4 py-3 font-medium text-slate-700">{inv.ten_khach_hang || "Khách lẻ"}</td>
+                        <td className="px-4 py-3 text-slate-600">{inv.ten_nhan_vien || "Hệ thống"}</td>
+                        <td className="px-4 py-3 text-right font-extrabold text-primary">{formatCurrencyVND(inv.tong_can_thanh_toan)}</td>
+                        <td className="px-4 py-3">{statusBadge(inv.trang_thai)}</td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center justify-end gap-2">
+                            <Button variant="outline" size="icon" asChild title="Chi tiết">
+                              <Link to={`/pos/${inv.id}`} aria-label="Chi tiết">
+                                <Pencil size={16} />
+                              </Link>
+                            </Button>
+                            {inv.trang_thai !== "DA_HUY" && (
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                aria-label="Hủy hóa đơn"
+                                className="text-destructive hover:bg-destructive/10"
+                                onClick={() => handleDelete(inv.id)}
+                              >
+                                <Trash2 size={16} />
+                              </Button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+
+                    {rows.length === 0 ? (
+                      <tr>
+                        <td className="px-4 py-8 text-center text-slate-400" colSpan={7}>
+                          Không có hóa đơn phù hợp ở trang này.
+                        </td>
+                      </tr>
+                    ) : null}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between border-t border-slate-100 pt-4 flex-wrap gap-2">
+                  <span className="text-xs font-semibold text-slate-500">
+                    Hiển thị {(page - 1) * 10 + 1} - {Math.min(page * 10, totalItems)} trong tổng số {totalItems} hóa đơn
+                  </span>
+                  <div className="flex flex-wrap items-center justify-end gap-1.5">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page === 1}
+                      onClick={() => setPage(p => Math.max(p - 1, 1))}
+                      className="text-xs"
+                    >
+                      Trước
+                    </Button>
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                      const pNum = i + 1;
+                      return (
+                        <Button
+                          key={pNum}
+                          variant={page === pNum ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setPage(pNum)}
+                          className={`w-8 h-8 p-0 text-xs font-semibold ${page === pNum ? "bg-primary text-white hover:bg-primary/95" : ""}`}
+                        >
+                          {pNum}
+>>>>>>> Stashed changes
                         </Button>
                         <Button
                           variant="outline"

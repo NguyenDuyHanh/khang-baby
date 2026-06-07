@@ -15,6 +15,7 @@ router.put('/:id', checkRole('MANAGER', 'ONLINE_SALES'), orderController.updateO
 
 // Order actions
 router.post('/:id/confirm', checkRole('MANAGER', 'ONLINE_SALES'), orderController.confirmOrder);
+router.post('/:id/deliver', checkRole('MANAGER', 'ONLINE_SALES'), orderController.deliverOrder);
 router.post('/:id/cancel', checkRole('MANAGER', 'ONLINE_SALES'), orderController.cancelOrder);
 router.post('/:id/complete', checkRole('MANAGER', 'ONLINE_SALES'), orderController.completeOrder);
 
