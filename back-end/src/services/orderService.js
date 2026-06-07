@@ -172,12 +172,30 @@ async function completeOrder(id) {
 
 // Generate order ID
 async function generateOrderId() {
+  const date = new Date();
+  const yy = date.getFullYear().toString().slice(2, 4);
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const prefix = `HD${yy}${mm}${dd}`;
+
+  // Lấy mã đơn hàng lớn nhất trong ngày hiện tại để tăng dần
   const [rows] = await pool.query(`
-    SELECT COUNT(*) as count FROM don_hang_online WHERE DATE(ngay_dat) = CURDATE()
-  `);
-  const count = rows[0].count + 1;
-  const today = new Date().toISOString().slice(2, 4) + new Date().toISOString().slice(5, 7);
-  return `HD${today}${String(count).padStart(4, '0')}`;
+    SELECT ma_don FROM don_hang_online 
+    WHERE ma_don LIKE ? 
+    ORDER BY ma_don DESC 
+    LIMIT 1
+  `, [`${prefix}%`]);
+
+  let count = 1;
+  if (rows.length > 0 && rows[0].ma_don) {
+    const lastMaDon = rows[0].ma_don;
+    const lastCount = parseInt(lastMaDon.slice(prefix.length), 10);
+    if (!isNaN(lastCount)) {
+      count = lastCount + 1;
+    }
+  }
+  
+  return `${prefix}${String(count).padStart(4, '0')}`;
 }
 
 // Get pending orders count
