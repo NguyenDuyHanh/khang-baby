@@ -154,10 +154,12 @@ async function getProductsNearExpiry(days = 30) {
 }
 
 // Get categories
-async function getCategories() {
-  const [rows] = await pool.query(`
-    SELECT * FROM danh_muc WHERE trang_thai = 'HOAT_DONG'
-  `);
+async function getCategories(includeInactive = false) {
+  let query = `SELECT * FROM danh_muc`;
+  if (!includeInactive) {
+    query += ` WHERE trang_thai = 'HOAT_DONG'`;
+  }
+  const [rows] = await pool.query(query);
   return rows;
 }
 
@@ -168,6 +170,22 @@ async function createCategory(ten_danh_muc, mo_ta = '') {
     [ten_danh_muc, mo_ta]
   );
   return result.insertId;
+}
+
+// Update category
+async function updateCategory(id, { ten_danh_muc, mo_ta, trang_thai }) {
+  await pool.query(
+    `UPDATE danh_muc SET ten_danh_muc = ?, mo_ta = ?, trang_thai = ? WHERE id = ?`,
+    [ten_danh_muc, mo_ta, trang_thai, id]
+  );
+}
+
+// Delete category
+async function deleteCategory(id) {
+  await pool.query(
+    `UPDATE danh_muc SET trang_thai = 'KHONG_HOAT_DONG' WHERE id = ?`,
+    [id]
+  );
 }
 
 // Get suppliers
@@ -198,6 +216,8 @@ module.exports = {
   getProductsNearExpiry,
   getCategories,
   createCategory,
+  updateCategory,
+  deleteCategory,
   getSuppliers,
   createSupplier,
 };

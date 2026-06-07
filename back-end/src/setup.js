@@ -230,9 +230,11 @@ async function ensureTables() {
         phuong_thuc_thanh_toan VARCHAR(50) DEFAULT 'COD' CHECK (phuong_thuc_thanh_toan IN ('COD', 'CHUYEN_KHOAN')),
         trang_thai VARCHAR(50) DEFAULT 'CHO_XU_LY' CHECK (trang_thai IN ('CHO_XU_LY', 'DA_XAC_NHAN', 'DANG_DONG_GOI', 'DANG_GIAO', 'DA_HOAN_THANH', 'DA_HUY', 'KHACH_DA_NHAN', 'KHIEU_NAI')),
         ly_do_khieu_nai TEXT,
+        ngay_giao_hang TIMESTAMP,
         ngay_tao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
+    await pool.query(`ALTER TABLE don_hang_online ADD COLUMN IF NOT EXISTS ngay_giao_hang TIMESTAMP;`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_don_hang_online_ma_don ON don_hang_online(ma_don);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_don_hang_online_trang_thai ON don_hang_online(trang_thai);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_don_hang_online_ngay_dat ON don_hang_online(ngay_dat);`);

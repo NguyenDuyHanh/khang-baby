@@ -284,6 +284,27 @@ function OrderFormInner({ readOnly = false, paramsId }) {
     });
   };
 
+  const handleShip = () => {
+    triggerConfirm({
+      title: "Giao hàng",
+      message: "Bạn muốn chuyển đơn hàng sang trạng thái Đang giao?",
+      variant: "primary",
+      onConfirm: async () => {
+        try {
+          const res = await apiRequest(`/orders/${paramsId}/ship`, { method: "POST", token });
+          if (res.ok) {
+            toast.success("Đã chuyển sang trạng thái Đang giao!");
+            navigate("/online");
+          } else {
+            toast.error("Lỗi: " + res.message);
+          }
+        } catch (err) {
+          toast.error("Lỗi: " + err.message);
+        }
+      }
+    });
+  };
+
   const handleComplete = () => {
     triggerConfirm({
       title: "Hoàn thành đơn hàng",
@@ -561,6 +582,11 @@ function OrderFormInner({ readOnly = false, paramsId }) {
                       </Button>
                     )}
                     {orderStatus === "DA_XAC_NHAN" && (
+                      <Button type="button" onClick={handleShip} className="bg-purple-600 hover:bg-purple-700 text-white w-full">
+                        Đang giao hàng
+                      </Button>
+                    )}
+                    {orderStatus === "DANG_GIAO" && (
                       <Button type="button" onClick={handleComplete} className="bg-emerald-600 hover:bg-emerald-700 text-white w-full">
                         Hoàn thành giao đơn
                       </Button>

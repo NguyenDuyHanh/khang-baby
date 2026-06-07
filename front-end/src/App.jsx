@@ -15,6 +15,7 @@ import InvoiceView from "@/pages/pos/InvoiceView";
 
 import InventoryLayout from "@/pages/inventory/InventoryLayout";
 import Products from "@/pages/inventory/Products";
+import Categories from "@/pages/inventory/Categories";
 import Stock from "@/pages/inventory/Stock";
 import Receipts from "@/pages/inventory/Receipts";
 import ReceiptForm from "@/pages/inventory/ReceiptForm";
@@ -29,6 +30,8 @@ import OrderForm from "@/pages/online/OrderForm";
 import OrderView from "@/pages/online/OrderView";
 
 import Reports from "@/pages/reports/Reports";
+
+import Vouchers from "@/pages/marketing/Vouchers";
 
 import RequireAuth from "@/components/auth/RequireAuth";
 import RequireRole from "@/components/auth/RequireRole";
@@ -73,6 +76,7 @@ function App() {
         >
           <Route index element={<Navigate to="stock" replace />} />
           <Route path="products" element={<Products />} />
+          <Route path="categories" element={<Categories />} />
           <Route path="stock" element={<Stock />} />
           <Route
             path="receipts"
@@ -143,6 +147,15 @@ function App() {
           element={
             <RequireRole allow={["MANAGER", "MARKETING"]}>
               <Reports />
+            </RequireRole>
+          }
+        />
+
+        <Route
+          path="marketing/vouchers"
+          element={
+            <RequireRole allow={["MANAGER", "MARKETING"]}>
+              <Vouchers />
             </RequireRole>
           }
         />

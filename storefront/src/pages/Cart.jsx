@@ -72,7 +72,17 @@ export default function Cart() {
                         >
                           <Minus size={14} />
                         </button>
-                        <span className="w-8 text-center font-medium text-sm">{item.quantity}</span>
+                        <input 
+                          type="text" 
+                          className="w-12 text-center font-medium text-sm focus:outline-none border-none bg-transparent" 
+                          value={item.quantity} 
+                          onChange={(e) => updateQuantity(item.id, e.target.value)}
+                          onBlur={(e) => {
+                            if (item.quantity === '' || Number(item.quantity) < 1) {
+                              updateQuantity(item.id, 1);
+                            }
+                          }}
+                        />
                         <button 
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[var(--color-primary)] transition-colors"

@@ -125,7 +125,8 @@ async function getProductsNearExpiry(req, res) {
 // Get categories
 async function getCategories(req, res) {
   try {
-    const categories = await productService.getCategories();
+    const includeInactive = req.query.all === 'true';
+    const categories = await productService.getCategories(includeInactive);
     res.json({ ok: true, data: categories });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
@@ -148,6 +149,31 @@ async function createCategory(req, res) {
       message: 'Category created successfully',
       id,
     });
+  } catch (error) {
+    res.status(400).json({ ok: false, message: error.message });
+  }
+}
+
+// Update category
+async function updateCategory(req, res) {
+  try {
+    const { ten_danh_muc, mo_ta, trang_thai } = req.body;
+    if (!ten_danh_muc) {
+      return res.status(400).json({ ok: false, message: 'Category name required' });
+    }
+    
+    await productService.updateCategory(req.params.id, { ten_danh_muc, mo_ta, trang_thai });
+    res.json({ ok: true, message: 'Category updated successfully' });
+  } catch (error) {
+    res.status(400).json({ ok: false, message: error.message });
+  }
+}
+
+// Delete category
+async function deleteCategory(req, res) {
+  try {
+    await productService.deleteCategory(req.params.id);
+    res.json({ ok: true, message: 'Category deleted successfully' });
   } catch (error) {
     res.status(400).json({ ok: false, message: error.message });
   }
@@ -194,6 +220,8 @@ module.exports = {
   getProductsNearExpiry,
   getCategories,
   createCategory,
+  updateCategory,
+  deleteCategory,
   getSuppliers,
   createSupplier,
 };

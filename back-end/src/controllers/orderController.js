@@ -160,6 +160,20 @@ async function cancelOrder(req, res) {
   }
 }
 
+// Ship order
+async function shipOrder(req, res) {
+  try {
+    await orderService.shipOrder(req.params.id);
+
+    res.json({
+      ok: true,
+      message: 'Order shipped successfully',
+    });
+  } catch (error) {
+    res.status(400).json({ ok: false, message: error.message });
+  }
+}
+
 // Complete order
 async function completeOrder(req, res) {
   try {
@@ -251,8 +265,8 @@ async function closeComplaint(req, res) {
     const [order] = await pool.query('SELECT * FROM don_hang_online WHERE id = ?', [req.params.id]);
     if (order.length === 0) return res.status(404).json({ ok: false, message: 'Not found' });
     
-    await pool.query('UPDATE don_hang_online SET trang_thai = ?, ly_do_khieu_nai = ? WHERE id = ?', ['KHACH_DA_NHAN', 'Đã giải quyết khiếu nại', req.params.id]);
-    res.json({ ok: true, message: 'Đã đóng khiếu nại thành công' });
+    await pool.query('UPDATE don_hang_online SET trang_thai = ?, ly_do_khieu_nai = ?, ngay_giao_hang = CURRENT_TIMESTAMP WHERE id = ?', ['DA_HOAN_THANH', 'Đã xử lý khiếu nại, chờ khách xác nhận', req.params.id]);
+    res.json({ ok: true, message: 'Đã đóng khiếu nại thành công, chờ khách xác nhận' });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
   }
@@ -277,6 +291,7 @@ module.exports = {
   createOrder,
   confirmOrder,
   cancelOrder,
+  shipOrder,
   completeOrder,
   updateOrder,
   getPendingOrdersCount,

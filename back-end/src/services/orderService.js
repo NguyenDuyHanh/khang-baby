@@ -162,11 +162,30 @@ async function cancelOrder(id) {
   );
 }
 
+// Ship order
+async function shipOrder(id) {
+  await pool.query(
+    `UPDATE don_hang_online SET trang_thai = 'DANG_GIAO' WHERE id = ?`,
+    [id]
+  );
+}
+
 // Complete order
 async function completeOrder(id) {
   await pool.query(
-    `UPDATE don_hang_online SET trang_thai = 'DA_HOAN_THANH' WHERE id = ?`,
+    `UPDATE don_hang_online SET trang_thai = 'DA_HOAN_THANH', ngay_giao_hang = CURRENT_TIMESTAMP WHERE id = ?`,
     [id]
+  );
+}
+
+// Auto complete orders after 7 days
+async function autoCompleteOrders() {
+  await pool.query(
+    `UPDATE don_hang_online 
+     SET trang_thai = 'KHACH_DA_NHAN', ly_do_khieu_nai = 'Tự động hoàn thành sau 7 ngày' 
+     WHERE trang_thai = 'DA_HOAN_THANH' 
+     AND ngay_giao_hang IS NOT NULL 
+     AND ngay_giao_hang < NOW() - INTERVAL '7 days'`
   );
 }
 
@@ -257,10 +276,12 @@ module.exports = {
   updateOrder,
   confirmOrder,
   cancelOrder,
+  shipOrder,
   completeOrder,
   generateOrderId,
   getPendingOrdersCount,
   getRecentOrders,
   getUserOrders,
   updateOrderFeedback,
+  autoCompleteOrders,
 };

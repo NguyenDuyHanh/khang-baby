@@ -10,7 +10,8 @@ import {
   FileText,
   Contact,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Tag
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
@@ -30,7 +31,7 @@ const menuItems = [
     allow: ['MANAGER', 'WAREHOUSE', 'SALES', 'ONLINE_SALES'],
     children: [
       { id: 'products-list', label: 'Danh sách sản phẩm', path: '/inventory/products' },
-      { id: 'products-cat', label: 'Loại', path: '/inventory/products' },
+      { id: 'products-cat', label: 'Loại', path: '/inventory/categories' },
       { id: 'products-stock', label: 'Tồn kho', path: '/inventory/stock' }
     ]
   },
@@ -60,6 +61,13 @@ const menuItems = [
     label: 'Báo cáo',
     icon: BarChart3,
     path: '/reports',
+    allow: ['MANAGER', 'MARKETING']
+  },
+  {
+    id: 'vouchers',
+    label: 'Phiếu giảm giá',
+    icon: Tag,
+    path: '/marketing/vouchers',
     allow: ['MANAGER', 'MARKETING']
   },
   {
